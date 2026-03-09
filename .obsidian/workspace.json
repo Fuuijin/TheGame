@@ -250,7 +250,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 407.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -265,7 +265,7 @@
       "obsidian-excalidraw-plugin:New drawing": false
     }
   },
-  "active": "ff67a71f4d5ef04f",
+  "active": "f6508707ca5f5d98",
   "lastOpenFiles": [
     "CLAUDE.md",
     "Core/Scope.md",
