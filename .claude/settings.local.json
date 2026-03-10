@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:dev.epicgames.com)",
+      "WebFetch(domain:vrealmatic.com)",
+      "WebFetch(domain:notes.hzfishy.fr)",
+      "WebFetch(domain:www.unrealcode.net)"
+    ]
+  }
+}

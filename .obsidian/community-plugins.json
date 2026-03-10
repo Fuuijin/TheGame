@@ -3,5 +3,6 @@
   "obsidian-style-settings",
   "obsidian-excalidraw-plugin",
   "obsidian-minimal-settings",
-  "obsidian-hider"
+  "obsidian-hider",
+  "obsidian-local-rest-api"
 ]
