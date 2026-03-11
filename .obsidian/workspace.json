@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Home.md",
+                "file": "Systems/Social/Influence.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Home"
+              "title": "Influence"
             }
           }
         ]
@@ -78,8 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300,
-    "collapsed": true
+    "width": 300
   },
   "right": {
     "id": "9c1f945c4348e328",
@@ -157,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Home.md",
+                "file": "Systems/Social/Influence.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of Home"
+              "title": "Outline of Influence"
             }
           },
           {
@@ -189,7 +188,7 @@
             "state": {
               "type": "localgraph",
               "state": {
-                "file": "Home.md",
+                "file": "Systems/Social/Influence.md",
                 "options": {
                   "collapse-filter": true,
                   "search": "",
@@ -217,14 +216,14 @@
                 }
               },
               "icon": "lucide-git-fork",
-              "title": "Graph of Home"
+              "title": "Graph of Influence"
             }
           }
         ]
       }
     ],
     "direction": "horizontal",
-    "width": 655.5
+    "width": 593.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -244,31 +243,34 @@
   },
   "active": "ab3ca35965798f2d",
   "lastOpenFiles": [
-    "Home.md",
-    "Experiments/Season & Cycles System.md",
-    "Systems/Ecology/seasons-system-map.html",
+    "Systems/Ecology/Seasons & Cycles.md",
+    "Systems/Social/Social Overview.md.tmp.8419.1773255107424",
+    "Systems/Social/Social Overview.md.tmp.8419.1773255102873",
+    "Systems/Social/Reputation & Propagation.md",
+    "Systems/Social/Reputation & Propagation.md.tmp.8419.1773255094219",
+    "Systems/Social/Influence.md",
+    "Systems/Social/Influence.md.tmp.8419.1773255046521",
+    "Systems/Ecology/Ecology Overview.md",
     "Systems/Ecology/seasons-system-map.svg",
-    "Systems/Ecology/Seasons & Cycles.md.tmp.6089.1773235581559",
-    "Systems/Ecology/Seasons & Cycles.md.tmp.6089.1773235571904",
-    "Systems/Ecology/Seasons & Cycles.md.tmp.5934.1773235520319",
+    "Prototype/phase1-headless/README.md",
+    "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238540516",
+    "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238533139",
+    "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238527506",
+    "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238451529",
+    "Prototype/phase1-headless/systems/season_subsystem.lua.tmp.7672.1773238442356",
+    "Prototype/phase1-headless/main.lua.tmp.7672.1773238336869",
+    "Systems/Legacy System.md",
+    "Experiments/Season & Cycles System.md",
     "Tech/Löve2d.md",
+    "Home.md",
     "Tech/UE5.md",
     "Ideas/Dump.md",
-    "Systems/Legacy System.md",
-    "Experiments",
     "CLAUDE.md",
     "Core/Scope.md",
-    "Systems/Ecology/Ecology Overview.md",
     "Core/Vision.md",
-    "Systems/Ecology/Seasons & Cycles.md",
-    "Mechanics",
-    "Ideas",
-    "Tech",
     "Entities/NPCs.md",
     "Entities/Player Character.md",
-    "Entities",
     "World/Biomes/Biomes Overview.md",
-    "World/Biomes",
     "World/World Overview.md",
     "Systems/Physics.md",
     "Systems/Social/Relations.md",
@@ -276,9 +278,6 @@
     "Systems/Social/Factions.md",
     "Systems/Social/Social Overview.md",
     "Systems/Ecology/Wildlife.md",
-    "Systems/Ecology/Vegetation.md",
-    "Systems/Economy/Economy Overview.md",
-    "Core/Core Loop.md",
-    "Core/Pillars.md"
+    "Systems/Ecology/Vegetation.md"
   ]
 }

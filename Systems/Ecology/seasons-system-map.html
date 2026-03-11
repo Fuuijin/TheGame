@@ -1,1 +1,465 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seasons — System Map · 13th Century</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&family=Share+Tech+Mono&family=Barlow:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0a0906;--surface:#111009;--surface2:#181510;--border:rgba(200,180,130,0.1);--border2:rgba(200,180,130,0.2);--text:#d8cdb8;--dim:#6a6050;--accent:#c8a850;--spring:#7a9e5a;--summer:#c89030;--fall:#b05020;--winter:#5878a0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-weight:300;font-size:14px;line-height:1.6;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 90% 90% at 50% 50%,transparent 60%,rgba(0,0,0,0.6) 100%);pointer-events:none;z-index:0}
+header{position:relative;z-index:10;padding:40px 48px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:16px}
+.wordmark{font-family:'IM Fell English',Georgia,serif;font-size:clamp(28px,4vw,48px);color:var(--accent);letter-spacing:.02em;line-height:1}
+.wordmark em{font-style:italic;font-size:.6em;display:block;margin-top:6px;color:var(--dim);letter-spacing:.05em}
+.header-meta{text-align:right;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--dim);line-height:1.9}
+.season-bar{display:flex;gap:3px;margin-top:8px;justify-content:flex-end}
+.sb{height:4px;width:44px;border-radius:1px;opacity:.65}
+.sb.sp{background:var(--spring)}.sb.su{background:var(--summer)}.sb.fa{background:var(--fall)}.sb.wi{background:var(--winter)}
+nav{position:relative;z-index:10;display:flex;gap:0;border-bottom:1px solid var(--border);padding:0 48px;overflow-x:auto}
+.tab{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:14px 20px;cursor:pointer;color:var(--dim);border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .2s;white-space:nowrap}
+.tab:hover{color:var(--text)}.tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.main{position:relative;z-index:1;padding:40px 48px}
+.view{display:none}.view.active{display:block;animation:fadeUp .3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section-label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--dim);margin-bottom:24px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:20px 22px}
+.card-title{font-family:'IM Fell English',serif;font-size:17px;color:var(--accent);margin-bottom:10px}
+.card ul{list-style:none;padding:0}
+.card ul li{font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:baseline;color:var(--text)}
+.card ul li:last-child{border-bottom:none}
+.card ul li::before{content:'—';color:var(--dim);flex-shrink:0;font-size:11px}
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.tag{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.15em;padding:3px 9px;border:1px solid currentColor;border-radius:1px;opacity:.7}
+.season-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-bottom:32px;border:1px solid var(--border);border-radius:2px;overflow:hidden}
+.snav-btn{padding:16px;text-align:center;cursor:pointer;background:var(--surface);border:none;color:var(--dim);font-family:'IM Fell English',serif;font-size:16px;letter-spacing:.05em;transition:all .2s;border-bottom:2px solid transparent}
+.snav-btn:hover{color:var(--text);background:var(--surface2)}
+.snav-btn.sp.active{color:var(--spring);border-bottom-color:var(--spring);background:var(--surface2)}
+.snav-btn.su.active{color:var(--summer);border-bottom-color:var(--summer);background:var(--surface2)}
+.snav-btn.fa.active{color:var(--fall);border-bottom-color:var(--fall);background:var(--surface2)}
+.snav-btn.wi.active{color:var(--winter);border-bottom-color:var(--winter);background:var(--surface2)}
+.snav-btn .s-icon{display:block;font-size:22px;margin-bottom:4px}
+.spanel{display:none}.spanel.active{display:block;animation:fadeUp .3s ease}
+.season-hero{padding:28px 32px;border:1px solid var(--border2);margin-bottom:24px;display:flex;gap:24px;align-items:flex-start;position:relative;overflow:hidden}
+.season-hero::before{content:'';position:absolute;inset:0;opacity:.04}
+.sp .season-hero::before{background:var(--spring)}.su .season-hero::before{background:var(--summer)}
+.fa .season-hero::before{background:var(--fall)}.wi .season-hero::before{background:var(--winter)}
+.s-glyph{font-size:56px;flex-shrink:0;line-height:1}
+.s-name{font-family:'IM Fell English',serif;font-size:36px;line-height:1;margin-bottom:6px}
+.sp .s-name{color:var(--spring)}.su .s-name{color:var(--summer)}.fa .s-name{color:var(--fall)}.wi .s-name{color:var(--winter)}
+.s-quote{font-family:'IM Fell English',serif;font-style:italic;color:var(--dim);font-size:15px}
+.s-threat{margin-top:10px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.2em;padding:4px 10px;border-radius:1px;display:inline-block}
+.sp .s-threat{background:rgba(122,158,90,.12);color:var(--spring)}.su .s-threat{background:rgba(200,144,48,.12);color:var(--summer)}
+.fa .s-threat{background:rgba(176,80,32,.12);color:var(--fall)}.wi .s-threat{background:rgba(88,120,160,.12);color:var(--winter)}
+.sys-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.sys-btn{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.15em;padding:8px 16px;border:1px solid var(--border);border-radius:1px;cursor:pointer;background:var(--surface);color:var(--dim);transition:all .2s}
+.sys-btn:hover{color:var(--text);border-color:var(--border2)}
+.sys-btn.active{color:var(--accent);border-color:var(--accent);background:rgba(200,168,80,.06)}
+.sys-panel{display:none}.sys-panel.active{display:block;animation:fadeUp .3s ease}
+.sys-title{font-family:'IM Fell English',serif;font-size:28px;color:var(--accent);margin-bottom:4px}
+.sys-desc{color:var(--dim);font-size:13px;max-width:640px;margin-bottom:20px}
+.tick-wrap{max-width:820px;margin:0 auto}
+.tick-step{display:grid;grid-template-columns:60px 1fr;gap:20px;position:relative}
+.tick-left{display:flex;flex-direction:column;align-items:center;padding-top:14px}
+.tick-circle{width:38px;height:38px;border-radius:50%;border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Share Tech Mono',monospace;font-size:13px;color:var(--accent);background:var(--bg);flex-shrink:0;z-index:1}
+.tick-line{width:1px;flex:1;background:linear-gradient(to bottom,rgba(200,168,80,.3),transparent);margin-top:6px;min-height:30px}
+.tick-body{background:var(--surface);border:1px solid var(--border);border-radius:2px;padding:16px 20px;margin-bottom:28px}
+.tick-title{font-family:'IM Fell English',serif;font-size:18px;color:var(--accent);margin-bottom:2px}
+.tick-freq{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--dim);margin-bottom:10px}
+.tick-body p{font-size:13px;color:var(--text);margin-bottom:10px}
+.outputs{display:flex;flex-wrap:wrap;gap:6px}
+.out-drives{background:rgba(122,158,90,.12);color:#7a9e5a;border:1px solid rgba(122,158,90,.3);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;padding:3px 8px;border-radius:1px}
+.out-reads{background:rgba(200,168,80,.08);color:#c8a850;border:1px solid rgba(200,168,80,.25);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;padding:3px 8px;border-radius:1px}
+.out-triggers{background:rgba(160,64,64,.10);color:#c06060;border:1px solid rgba(160,64,64,.3);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;padding:3px 8px;border-radius:1px}
+.out-updates{background:rgba(88,120,160,.10);color:#5878a0;border:1px solid rgba(88,120,160,.3);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;padding:3px 8px;border-radius:1px}
+.matrix-wrap{overflow-x:auto}
+.matrix{width:100%;border-collapse:collapse;font-size:13px;min-width:720px}
+.matrix th{font-family:'IM Fell English',serif;font-size:15px;padding:12px 16px;border:1px solid var(--border);text-align:center;background:var(--surface2)}
+.matrix th.row-head{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.15em;text-align:left;color:var(--dim);min-width:160px}
+.matrix td{padding:10px 14px;border:1px solid var(--border);vertical-align:top;font-size:12px;line-height:1.5}
+.matrix tr:hover td{background:rgba(255,255,255,.015)}
+.th-sp{color:var(--spring)}.th-su{color:var(--summer)}.th-fa{color:var(--fall)}.th-wi{color:var(--winter)}
+.up{color:#78b878}.dn{color:#b87050}.nt{color:var(--dim);font-style:italic}
+.arch-layout{display:flex;flex-direction:column;gap:0}
+.arch-list{display:flex;flex-direction:row;flex-wrap:wrap;gap:4px;padding-bottom:20px;border-bottom:1px solid var(--border);margin-bottom:24px}
+.arch-btn{padding:10px 16px;border:1px solid var(--border);border-radius:2px;cursor:pointer;background:var(--surface);text-align:left;transition:all .2s;display:flex;flex-direction:column}
+.arch-btn:hover{border-color:var(--border2)}
+.arch-btn.active{border-color:var(--accent);background:rgba(200,168,80,.05);border-bottom:2px solid var(--accent)}
+.arch-btn .ab-name{font-family:'IM Fell English',serif;font-size:14px;color:var(--accent);display:block;margin-bottom:1px}
+.arch-btn .ab-type{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--dim)}
+.arch-detail{display:none}.arch-detail.active{display:block;animation:fadeUp .3s ease}
+.ad-title{font-family:'IM Fell English',serif;font-size:30px;color:var(--accent);margin-bottom:2px}
+.ad-type{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--dim);margin-bottom:16px}
+.ad-desc{font-size:14px;color:var(--text);max-width:640px;margin-bottom:20px;line-height:1.7}
+.props-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:20px}
+.props-table th{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.2em;color:var(--dim);text-align:left;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.props-table td{padding:8px 12px;border-bottom:1px solid var(--border);vertical-align:top}
+.props-table tr:last-child td{border-bottom:none}
+.prop-name{font-family:'Share Tech Mono',monospace;color:#9ecfff;font-size:12px}
+.prop-type{font-family:'Share Tech Mono',monospace;color:var(--summer);font-size:12px}
+.prop-note{color:var(--dim);font-size:12px}
+.dep-section{margin-top:16px}
+.dep-section h4{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--dim);margin-bottom:8px}
+.dep-row{display:flex;flex-wrap:wrap;gap:6px}
+.dep{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 10px;border-radius:1px}
+.dep-in{border:1px solid rgba(88,120,160,.5);color:var(--winter)}
+.dep-out{border:1px solid rgba(122,158,90,.5);color:var(--spring)}
+.dep-evt{border:1px solid rgba(200,168,80,.4);color:var(--accent)}
+.flow-diagram{width:100%;overflow-x:auto;padding-bottom:8px}
+.flow-svg{display:block;min-width:860px;width:100%}
+@media(max-width:700px){.main{padding:24px 20px}header{padding:24px 20px 16px}nav{padding:0 20px}.grid2,.grid3{grid-template-columns:1fr}.season-nav{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wordmark">The Seasons System<em>13th Century · No Magic · Simulation Roguelike RPG · UE 5.7</em></div>
+  <div class="header-meta">NATURE IS THE ENEMY<br>FAMINE KILLS MORE THAN SWORDS<br><div class="season-bar"><div class="sb sp"></div><div class="sb su"></div><div class="sb fa"></div><div class="sb wi"></div></div></div>
+</header>
+<nav>
+  <button class="tab active" onclick="showView('flow',this)">SYSTEM FLOW</button>
+  <button class="tab" onclick="showView('seasons',this)">SEASONS</button>
+  <button class="tab" onclick="showView('systems',this)">SIMULATION SYSTEMS</button>
+  <button class="tab" onclick="showView('tick',this)">TICK LOOP</button>
+  <button class="tab" onclick="showView('matrix',this)">IMPACT MATRIX</button>
+  <button class="tab" onclick="showView('arch',this)">UE5 ARCHITECTURE</button>
+</nav>
+<div class="main">
+
+<!-- SYSTEM FLOW -->
+<div class="view active" id="view-flow">
+  <p class="section-label">How seasons cascade through every simulation layer — 13th century, grounded in reality</p>
+  <div class="flow-diagram">
+    <svg class="flow-svg" viewBox="0 0 920 730" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="rgba(200,180,130,0.4)"/></marker>
+        <marker id="arr-g" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="#c8a850"/></marker>
+        <marker id="arr-r" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="5" markerHeight="5" orient="auto"><path d="M0,1 L7,4 L0,7 Z" fill="rgba(160,64,64,0.5)"/></marker>
+      </defs>
+      <rect x="310" y="20" width="300" height="66" rx="2" fill="rgba(200,168,80,0.07)" stroke="#c8a850" stroke-width="1.5"/>
+      <text x="460" y="49" text-anchor="middle" font-family="'IM Fell English',serif" font-size="22" fill="#c8a850">Season System</text>
+      <text x="460" y="70" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" letter-spacing="2" fill="rgba(200,168,80,0.4)">GLOBAL STATE · SERVER AUTHORITY</text>
+      <rect x="60" y="118" width="84" height="32" rx="2" fill="rgba(122,158,90,0.1)" stroke="#7a9e5a" stroke-width="1"/>
+      <text x="102" y="139" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#7a9e5a">Spring</text>
+      <rect x="162" y="118" width="84" height="32" rx="2" fill="rgba(200,144,48,0.1)" stroke="#c89030" stroke-width="1"/>
+      <text x="204" y="139" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#c89030">Summer</text>
+      <rect x="264" y="118" width="84" height="32" rx="2" fill="rgba(176,80,32,0.1)" stroke="#b05020" stroke-width="1"/>
+      <text x="306" y="139" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#b05020">Autumn</text>
+      <rect x="366" y="118" width="84" height="32" rx="2" fill="rgba(88,120,160,0.1)" stroke="#5878a0" stroke-width="1"/>
+      <text x="408" y="139" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#5878a0">Winter</text>
+      <line x1="380" y1="86" x2="144" y2="118" stroke="rgba(200,168,80,0.2)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="420" y1="86" x2="246" y2="118" stroke="rgba(200,168,80,0.2)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="460" y1="86" x2="348" y2="118" stroke="rgba(200,168,80,0.2)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="500" y1="86" x2="450" y2="118" stroke="rgba(200,168,80,0.2)" stroke-width="1" marker-end="url(#arr)"/>
+      <line x1="460" y1="86" x2="460" y2="206" stroke="#c8a850" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-g)"/>
+      <rect x="295" y="206" width="330" height="58" rx="2" fill="rgba(112,168,136,0.07)" stroke="#70a888" stroke-width="1.5"/>
+      <text x="460" y="231" text-anchor="middle" font-family="'IM Fell English',serif" font-size="19" fill="#70a888">Ecology &amp; World Growth</text>
+      <text x="460" y="250" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" letter-spacing="1.5" fill="rgba(112,168,136,0.4)">FLORA · FAUNA · SOIL · WATER · WEATHER</text>
+      <line x1="460" y1="264" x2="460" y2="340" stroke="#70a888" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+      <rect x="225" y="340" width="470" height="58" rx="2" fill="rgba(184,144,80,0.07)" stroke="#b89050" stroke-width="1.5"/>
+      <text x="460" y="365" text-anchor="middle" font-family="'IM Fell English',serif" font-size="19" fill="#b89050">Base Resources</text>
+      <text x="460" y="385" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" letter-spacing="1.5" fill="rgba(184,144,80,0.4)">GRAIN · LIVESTOCK · TIMBER · IRON · FUEL · SALT · WATER</text>
+      <line x1="380" y1="398" x2="265" y2="462" stroke="#b89050" stroke-width="1.1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+      <line x1="540" y1="398" x2="655" y2="462" stroke="#b89050" stroke-width="1.1" stroke-dasharray="4,3" marker-end="url(#arr)"/>
+      <rect x="100" y="462" width="280" height="56" rx="2" fill="rgba(192,112,48,0.07)" stroke="#c07030" stroke-width="1.5"/>
+      <text x="240" y="486" text-anchor="middle" font-family="'IM Fell English',serif" font-size="18" fill="#c07030">Economy &amp; Trade</text>
+      <text x="240" y="505" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" letter-spacing="1.2" fill="rgba(192,112,48,0.4)">PRICES · SCARCITY · ROUTES · GUILDS</text>
+      <rect x="540" y="462" width="280" height="56" rx="2" fill="rgba(136,112,168,0.07)" stroke="#8870a8" stroke-width="1.5"/>
+      <text x="680" y="486" text-anchor="middle" font-family="'IM Fell English',serif" font-size="18" fill="#8870a8">Population</text>
+      <text x="680" y="505" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="9" letter-spacing="1.2" fill="rgba(136,112,168,0.4)">HUNGER · DISEASE · MORALE · REVOLT</text>
+      <path d="M380,490 Q460,512 540,490" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#arr)"/>
+      <path d="M540,508 Q460,530 380,508" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3" fill="none" marker-end="url(#arr)"/>
+      <line x1="240" y1="518" x2="180" y2="590" stroke="#c07030" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+      <line x1="680" y1="518" x2="740" y2="590" stroke="#8870a8" stroke-width="1" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+      <rect x="30" y="590" width="264" height="48" rx="2" fill="rgba(160,64,64,0.07)" stroke="#a04040" stroke-width="1.2"/>
+      <text x="162" y="611" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#a04040">World Events</text>
+      <text x="162" y="629" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" letter-spacing="1" fill="rgba(160,64,64,0.4)">FAMINE · PLAGUE · WAR · REVOLT</text>
+      <rect x="360" y="590" width="220" height="48" rx="2" fill="rgba(160,64,64,0.07)" stroke="#a04040" stroke-width="1.2"/>
+      <text x="470" y="611" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#a04040">Player Experience</text>
+      <text x="470" y="629" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" letter-spacing="1" fill="rgba(160,64,64,0.4)">SURVIVAL · TRADE · NARRATIVE</text>
+      <rect x="650" y="590" width="240" height="48" rx="2" fill="rgba(160,64,64,0.07)" stroke="#a04040" stroke-width="1.2"/>
+      <text x="770" y="611" text-anchor="middle" font-family="'IM Fell English',serif" font-size="15" fill="#a04040">Threats</text>
+      <text x="770" y="629" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" letter-spacing="1" fill="rgba(160,64,64,0.4)">BANDITS · WOLVES · DISEASE · RAIDERS</text>
+      <path d="M872,614 Q912,380 878,48 Q860,22 610,30" stroke="rgba(160,64,64,0.18)" stroke-width="1" stroke-dasharray="4,4" fill="none" marker-end="url(#arr-r)"/>
+      <rect x="0" y="692" width="920" height="38" fill="rgba(0,0,0,0.5)"/>
+      <line x1="20" y1="711" x2="54" y2="711" stroke="#c8a850" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="60" y="715" font-family="'Share Tech Mono',monospace" font-size="8" fill="#6a6050" letter-spacing="1">DRIVES</text>
+      <line x1="126" y1="711" x2="160" y2="711" stroke="rgba(200,180,130,0.2)" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="166" y="715" font-family="'Share Tech Mono',monospace" font-size="8" fill="#6a6050" letter-spacing="1">FEEDBACK</text>
+      <text x="460" y="715" text-anchor="middle" font-family="'Share Tech Mono',monospace" font-size="8" fill="rgba(200,168,80,0.25)" letter-spacing="2">NO MAGIC · COLD KILLS · FAMINE BREAKS KINGDOMS</text>
+    </svg>
+  </div>
+</div>
+
+<!-- SEASONS -->
+<div class="view" id="view-seasons">
+  <p class="section-label">Each season's real-world impact on a 13th century simulation</p>
+  <div class="season-nav">
+    <button class="snav-btn sp active" onclick="showSeason('sp',this)"><span class="s-icon">🌱</span>Spring</button>
+    <button class="snav-btn su" onclick="showSeason('su',this)"><span class="s-icon">☀️</span>Summer</button>
+    <button class="snav-btn fa" onclick="showSeason('fa',this)"><span class="s-icon">🍂</span>Autumn</button>
+    <button class="snav-btn wi" onclick="showSeason('wi',this)"><span class="s-icon">❄️</span>Winter</button>
+  </div>
+  <div class="spanel sp active" id="spanel-sp">
+    <div class="season-hero"><div class="s-glyph">🌱</div><div><div class="s-name">Spring</div><div class="s-quote">"The mud is as dangerous as any sword."</div><div class="s-threat">PRIMARY THREAT: FLOODING · SPRING FEVER · STARVING BANDITS · ROAD FAILURE</div></div></div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Ecology &amp; World</div><ul><li>Snow melt — rivers flood, low roads impassable for weeks</li><li>Ploughing begins; ground soft, exhausting for oxen and men</li><li>Bears emerge from dens; wolves still hungry from winter</li><li>Birthing season — livestock, deer, wild boar</li><li>Spring fever (dysentery) from thawed filth in water</li><li>Mud terrain degrades all cart and troop movement</li></ul></div>
+      <div class="card"><div class="card-title">Resources</div><ul><li>Winter stockpiles at minimum — food scarcity peaks in March–April</li><li>First foraging: nettles, sorrel, wild garlic, birch sap</li><li>Planting window: wheat, rye, barley — yield not until autumn</li><li>Salmon and trout running upstream — river fishing opportunity</li><li>Sap tapping for resin and adhesives</li><li>Timber felling suboptimal (green, wet wood)</li></ul></div>
+      <div class="card"><div class="card-title">Economy &amp; Trade</div><ul><li>Grain prices at yearly peak — peasants desperate</li><li>Merchant caravans delayed 2–4 weeks by mud</li><li>Peasants hired for ploughing — temporary labour market</li><li>Iron tools in high demand as farming restarts</li><li>Debt taken by poor families to survive until harvest</li></ul></div>
+      <div class="card"><div class="card-title">Population &amp; Threats</div><ul><li>Starvation deaths possible if winter was severe</li><li>Bandits at high activity — hungry, desperate outlaws</li><li>Morale lifts as days lengthen; hope returns</li><li>Plague risk from contaminated spring water</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:14px"><div class="card-title">Events &amp; Quests</div><div class="tag-row"><span class="tag" style="color:var(--spring)">Easter Feast</span><span class="tag" style="color:var(--spring)">River Flood</span><span class="tag" style="color:var(--spring)">Ploughing Contracts</span><span class="tag" style="color:var(--spring)">Bandit Clearance</span><span class="tag" style="color:var(--spring)">Dysentery Outbreak</span><span class="tag" style="color:var(--spring)">Seed Loan Dispute</span></div></div>
+  </div>
+  <div class="spanel su" id="spanel-su">
+    <div class="season-hero"><div class="s-glyph">☀️</div><div><div class="s-name">Summer</div><div class="s-quote">"When men are well-fed, lords make war."</div><div class="s-threat">PRIMARY THREAT: DROUGHT · MILITARY LEVY · WILDFIRE · CROP BLIGHT</div></div></div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Ecology &amp; World</div><ul><li>Long days — maximum travel, trade, and labour window</li><li>Drought dries rivers; water mills slow or stop</li><li>Hay cutting season — failure means livestock die in winter</li><li>Livestock on summer pasture; insects carry disease near water</li><li>Forest fire risk during dry spells</li><li>Bogs and marshes dry enough to cross</li></ul></div>
+      <div class="card"><div class="card-title">Resources</div><ul><li>Berries, cherries, early vegetables available</li><li>Wool shearing — major cloth trade input</li><li>Salt harvesting by evaporation at peak efficiency</li><li>Honey and beeswax harvest mid-summer</li><li>Charcoal burning ideal (dry, safe conditions)</li><li>Water sources stressed — wells may run low in drought</li></ul></div>
+      <div class="card"><div class="card-title">Economy &amp; Trade</div><ul><li>Trade roads at full capacity — merchant peak season</li><li>Summer fairs — bulk commodity trading events</li><li>Military campaigns drain towns of men, food, horses</li><li>Food prices lowest of year — brief window of abundance</li><li>Wool and cloth prices rise post-shearing</li></ul></div>
+      <div class="card"><div class="card-title">Population &amp; Threats</div><ul><li>Military levy conscripts 10–20% of young men</li><li>Malaria and fever near standing water</li><li>Morale peak — fairs, festivals, warmth</li><li>Banditry low — people employed, roads patrolled</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:14px"><div class="card-title">Events &amp; Quests</div><div class="tag-row"><span class="tag" style="color:var(--summer)">Summer Fair</span><span class="tag" style="color:var(--summer)">Military Levy</span><span class="tag" style="color:var(--summer)">Drought Crisis</span><span class="tag" style="color:var(--summer)">Wildfire</span><span class="tag" style="color:var(--summer)">Crop Blight</span><span class="tag" style="color:var(--summer)">Wool Caravan</span></div></div>
+  </div>
+  <div class="spanel fa" id="spanel-fa">
+    <div class="season-hero"><div class="s-glyph">🍂</div><div><div class="s-name">Autumn</div><div class="s-quote">"You have until the frost. Then God decides."</div><div class="s-threat">PRIMARY THREAT: HARVEST FAILURE · GRANARY RAIDS · TITHE REVOLT · EARLY FROST</div></div></div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Ecology &amp; World</div><ul><li>Days shorten rapidly; first frosts hit in weeks 3–4</li><li>All available hands demanded in the harvest fields</li><li>Animals fattened — best hunting and slaughter season</li><li>Acorn and beechmast drop — pig pannage season opens</li><li>Fog and rain increase; road visibility drops</li><li>Rivers rise again with autumn rains</li></ul></div>
+      <div class="card"><div class="card-title">Resources</div><ul><li>Grain harvest — entire year's food decided in 3 weeks</li><li>Root vegetables: turnips, parsnips, beets stockpiled</li><li>Pig slaughter and salting — pork through winter</li><li>Mushroom peak — many edible, several deadly</li><li>Optimal timber felling (dry, dense wood)</li><li>Salt demand surges for meat preservation</li></ul></div>
+      <div class="card"><div class="card-title">Economy &amp; Trade</div><ul><li>Post-harvest grain glut briefly drops prices</li><li>Merchants race to buy stock before winter closes roads</li><li>Taxation season — lords collect tithe from harvest</li><li>Preserved goods (salted meat, barrels) highly valued</li><li>Salt trade becomes critical and strategic</li></ul></div>
+      <div class="card"><div class="card-title">Population &amp; Threats</div><ul><li>Anxiety high — a poor yield means winter deaths</li><li>Organised bandit raids on harvest caravans</li><li>Tithe collection triggers serf unrest and revolt risk</li><li>Slaughter festivals briefly boost morale</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:14px"><div class="card-title">Events &amp; Quests</div><div class="tag-row"><span class="tag" style="color:var(--fall)">The Harvest</span><span class="tag" style="color:var(--fall)">Tithe Dispute</span><span class="tag" style="color:var(--fall)">Granary Raid</span><span class="tag" style="color:var(--fall)">Early Frost Warning</span><span class="tag" style="color:var(--fall)">Slaughter Festival</span><span class="tag" style="color:var(--fall)">Peasant Revolt</span></div></div>
+  </div>
+  <div class="spanel wi" id="spanel-wi">
+    <div class="season-hero"><div class="s-glyph">❄️</div><div><div class="s-name">Winter</div><div class="s-quote">"Cold is not dramatic. It just kills you slowly."</div><div class="s-threat">PRIMARY THREAT: STARVATION · HYPOTHERMIA · PLAGUE · ISOLATION</div></div></div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Ecology &amp; World</div><ul><li>Snow and ice lock roads for weeks — settlements isolated</li><li>Rivers freeze — new crossing routes open on ice</li><li>Livestock confined indoors consuming stored fodder</li><li>Wolves desperate and bold — attack village livestock</li><li>Shortest days; almost no outdoor productive labour</li><li>Blizzards can cut entire regions off for days</li></ul></div>
+      <div class="card"><div class="card-title">Resources</div><ul><li>All stored resources drawn down daily — no replenishment</li><li>Ice fishing — slow, cold, but sustains small populations</li><li>Fuel (wood, peat) consumed at 4× summer rate</li><li>Fodder for livestock runs critically low by February</li><li>Salt meat and preserved stores are daily survival</li><li>Iron trade frozen — no new tool imports until spring</li></ul></div>
+      <div class="card"><div class="card-title">Economy &amp; Trade</div><ul><li>Trade routes dead — roads impassable for weeks</li><li>Local hoarding drives prices to extreme highs</li><li>Grain can reach 3–5× normal price if harvest was poor</li><li>Wealthy exploit scarcity; debt bondage emerges</li><li>Craft work peaks — indoor repair, weaving, tool-making</li></ul></div>
+      <div class="card"><div class="card-title">Population &amp; Threats</div><ul><li>Elderly and infants die — natural mortality spike</li><li>Starvation deaths if harvest yield was insufficient</li><li>Plague spreads in crowded, cold, filthy quarters</li><li>Morale at yearly low — desperation, violence, hopelessness</li></ul></div>
+    </div>
+    <div class="card" style="margin-top:14px"><div class="card-title">Events &amp; Quests</div><div class="tag-row"><span class="tag" style="color:var(--winter)">Christmas / Yule</span><span class="tag" style="color:var(--winter)">Famine Crisis</span><span class="tag" style="color:var(--winter)">Plague Outbreak</span><span class="tag" style="color:var(--winter)">Wolf Pack Attack</span><span class="tag" style="color:var(--winter)">Fuel Shortage</span><span class="tag" style="color:var(--winter)">Debt Collector</span></div></div>
+  </div>
+</div>
+
+<!-- SIMULATION SYSTEMS -->
+<div class="view" id="view-systems">
+  <p class="section-label">The five simulation layers seasons drive</p>
+  <div class="sys-nav">
+    <button class="sys-btn active" onclick="showSystem('ecology',this)">ECOLOGY</button>
+    <button class="sys-btn" onclick="showSystem('resources',this)">RESOURCES</button>
+    <button class="sys-btn" onclick="showSystem('economy',this)">ECONOMY</button>
+    <button class="sys-btn" onclick="showSystem('population',this)">POPULATION</button>
+    <button class="sys-btn" onclick="showSystem('threats',this)">THREATS</button>
+  </div>
+  <div class="sys-panel active" id="sys-ecology">
+    <div class="sys-title">Ecology &amp; World Growth</div>
+    <div class="sys-desc">The living substrate. Every other system reads from ecology. Translation layer between abstract season state and concrete world data per biome tile.</div>
+    <div class="grid3">
+      <div class="card"><div class="card-title">Flora</div><ul><li>Each tile has a <strong>biomass value</strong> (0–100): spring +8/wk, summer +4, autumn −3, winter −12</li><li>Biomass gates forage yields, animal populations, enemy concealment</li><li>Deforestation is permanent without active replanting</li></ul></div>
+      <div class="card"><div class="card-title">Fauna</div><ul><li>Animal populations modelled as integer counts per region</li><li>Spring births, summer peak, autumn optimal culling, winter die-off</li><li>Overhunting depletes region for 1–2 seasons; predators follow prey curves</li></ul></div>
+      <div class="card"><div class="card-title">Soil &amp; Agriculture</div><ul><li>Farm plots have a <strong>fertility score</strong> modified by rest, manuring, flooding</li><li>Yield = base × fertility × weather roll. Late frost destroys spring crops</li><li>Three-field system: two active, one fallow. Breaking it costs fertility</li></ul></div>
+      <div class="card"><div class="card-title">Water</div><ul><li>Rivers have a float value: spring flood, summer low, autumn rise, winter freeze</li><li>Mills stop in drought. Fords impassable in flood. Ice opens winter crossings</li><li>Spring water quality degrades (disease risk from thaw)</li></ul></div>
+      <div class="card"><div class="card-title">Weather Events</div><ul><li>Each season has a probability table for extreme events</li><li>Spring: flood 15%, late frost 20%. Summer: drought 18%, blight 8%</li><li>Autumn: early frost 25%, wet harvest 30%. Winter: blizzard 35%</li><li>Events chain: drought → blight → famine → revolt</li></ul></div>
+      <div class="card"><div class="card-title">Biome Variation</div><ul><li>Forest, plains, wetland, upland, coastal each respond differently</li><li>Coastal: milder winters, fog, fish-dominant resources</li><li>Upland: harder winters, shorter growing season</li><li>Wetland: highest disease risk, peat fuel available, poor farming</li></ul></div>
+    </div>
+  </div>
+  <div class="sys-panel" id="sys-resources">
+    <div class="sys-title">Base Resources</div>
+    <div class="sys-desc">The economic bedrock. Seasons control availability windows. Resources move — they are never created from nothing.</div>
+    <div class="grid3">
+      <div class="card"><div class="card-title">Grain &amp; Food</div><ul><li>Planted spring, harvested autumn — 6-month pipeline with no shortcut</li><li>Annual supply determined at harvest. No second chances</li><li>Storage degrades 5%/month without proper granary</li></ul></div>
+      <div class="card"><div class="card-title">Livestock</div><ul><li>Cattle, sheep, pigs each have seasonal cycles</li><li>Fodder must be stored in summer for winter survival</li><li>Autumn slaughter reduces mouths to feed; produces salted meat</li></ul></div>
+      <div class="card"><div class="card-title">Timber &amp; Fuel</div><ul><li>Timber felled in autumn/winter (dry, dense, less sap)</li><li>Peat cut in summer, dried through autumn</li><li>Fuel demand spikes 4× in winter; shortage is a survival crisis</li></ul></div>
+      <div class="card"><div class="card-title">Iron &amp; Crafts</div><ul><li>Mining year-round but slowed by mud and cold</li><li>Smithing peaks in autumn/winter (indoor work)</li><li>Charcoal supply gates all iron production</li></ul></div>
+      <div class="card"><div class="card-title">Salt</div><ul><li>Harvested in summer or mined year-round</li><li>Autumn demand surges — entire slaughter season depends on it</li><li>Salt scarcity in autumn = meat rots = winter starvation</li></ul></div>
+      <div class="card"><div class="card-title">Forage &amp; Wild</div><ul><li>Spring herbs, summer berries, autumn mushrooms — all exclusive windows</li><li>Missing the window means waiting a full year</li><li>Over-foraging depletes tile; recovers next season</li></ul></div>
+    </div>
+  </div>
+  <div class="sys-panel" id="sys-economy">
+    <div class="sys-title">Economy &amp; Trade</div>
+    <div class="sys-desc">Supply and demand driven entirely by resource availability. Trade routes are physical and season-dependent — no fast travel, no magic markets.</div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Price Simulation</div><ul><li>Price = BaseCost × (ExpectedDemand ÷ CurrentStock) × SeasonPressure</li><li>Clamped 0.5× to 5.0× base. Rolling 4-week demand average prevents spikes</li><li>Grain peaks Feb–April. Timber peaks Jan–Feb. Wool peaks Oct–Nov</li><li>Local vs regional prices differ — trade arbitrage is a core mechanic</li></ul></div>
+      <div class="card"><div class="card-title">Trade Routes</div><ul><li>Routes have passability states: open / muddy / frozen / closed</li><li>Spring mud: −60% speed. Winter snow: same. Summer: 100% open</li><li>River routes: fastest in summer; frozen crossings in deep winter</li><li>Bandits target active caravan routes — especially autumn</li></ul></div>
+      <div class="card"><div class="card-title">Guilds &amp; Factions</div><ul><li>Farming guild: irrelevant in winter, dominant in spring/autumn</li><li>Merchant guild: summer peak; lobbies against road closures</li><li>Church: collects harvest tithe; distributes charity in famine</li><li>Nobility: extracts all year; wages war in summer</li></ul></div>
+      <div class="card"><div class="card-title">Stockpile Mechanics</div><ul><li>NPCs maintain stockpile targets based on prior winter depletion</li><li>Pre-winter hoarding is rational AI behaviour — prices spike in October</li><li>Player can sell into autumn spike or hold for spring scarcity</li><li>Granary building required for grain storage beyond 500 units</li></ul></div>
+    </div>
+  </div>
+  <div class="sys-panel" id="sys-population">
+    <div class="sys-title">Population</div>
+    <div class="sys-desc">The human consequence layer. Population grows when the simulation works and collapses when it fails.</div>
+    <div class="grid2">
+      <div class="card"><div class="card-title">Life &amp; Death Cycle</div><ul><li>Monthly: births, natural deaths, disease deaths, starvation deaths</li><li>Births peak in spring (9 months after summer conceptions)</li><li>Winter mortality spike: elderly and infants most vulnerable</li><li>Starvation threshold: food per capita below 0.6/day for 4+ weeks</li></ul></div>
+      <div class="card"><div class="card-title">Migration</div><ul><li>Peasants flee famine — they don't die in place if escape is possible</li><li>Refugee influx to stable regions spikes local food demand</li><li>Abandoned villages lose tax base; lords respond with force or incentives</li></ul></div>
+      <div class="card"><div class="card-title">Morale &amp; Unrest</div><ul><li>Morale: 0–100 float per settlement, updated weekly</li><li>Below 20: passive resistance (lower tax yield, slower labour)</li><li>Below 10: revolt triggers — granary burning, killing of tax collectors</li><li>Revolts contagious to neighbouring settlements within 2 weeks</li></ul></div>
+      <div class="card"><div class="card-title">Labour Capacity</div><ul><li>Spring/summer: all hands needed outdoors</li><li>Autumn: harvest takes absolute priority for 3–4 weeks</li><li>Winter: indoor crafts, repair, construction</li><li>Military levy removes 10–20% of adult males in summer</li></ul></div>
+    </div>
+  </div>
+  <div class="sys-panel" id="sys-threats">
+    <div class="sys-title">Threats</div>
+    <div class="sys-desc">No monsters. Every threat is human desperation, animal instinct, or natural disaster — each with a root cause in the simulation that players can address upstream.</div>
+    <div class="grid3">
+      <div class="card"><div class="card-title">Bandits</div><ul><li>Driven by hunger, unemployment, post-war displacement</li><li>Spring: desperate starving outlaws. Autumn: organised harvest raiders</li><li>Root fix: stable economy reduces banditry over seasons</li></ul></div>
+      <div class="card"><div class="card-title">Wolves &amp; Predators</div><ul><li>Winter: bold and desperate, attack livestock and travellers</li><li>Spring: bears emerging, protective of cubs</li><li>Population tracks prey — overhunting prey collapses predator numbers</li></ul></div>
+      <div class="card"><div class="card-title">Disease</div><ul><li>Spring thaw: waterborne disease from melting filth</li><li>Summer: malaria near standing water</li><li>Winter: plague in crowded, cold, hungry, unwashed quarters</li><li>Root fix: sanitation, food security, uncrowding</li></ul></div>
+      <div class="card"><div class="card-title">Rival Lords &amp; War</div><ul><li>Wars happen in summer — armies need feeding</li><li>Passage of armies destroys crops and livestock</li><li>War disrupts trade routes for 1–3 seasons after</li></ul></div>
+      <div class="card"><div class="card-title">Natural Disasters</div><ul><li>Flood, drought, blight, fire, blizzard — season-probabilistic</li><li>Chain into economic crises if stockpiles are thin</li><li>Mitigated by: dikes, irrigation, firebreaks, granary depth</li></ul></div>
+      <div class="card"><div class="card-title">Revolts</div><ul><li>End state of: hunger + overtaxation + morale collapse</li><li>Granary burning destroys following year's seed corn</li><li>The hardest simulation event to recover from</li><li>Triggered autumn/winter when food + morale both fail</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- TICK LOOP -->
+<div class="view" id="view-tick">
+  <p class="section-label">Simulation order of operations — sequence matters for correct causality</p>
+  <div class="tick-wrap">
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">01</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Season Tick — Check &amp; Transition</div><div class="tick-freq">DAILY · SERVER AUTHORITY · SeasonSubsystem</div><p>SeasonSubsystem checks current time against season_end_at. Within 48hrs: broadcast SeasonWarning. Past end: trigger SeasonTransition and update all modifier caches.</p><div class="outputs"><span class="out-drives">SeasonState broadcast</span><span class="out-triggers">SeasonWarning event</span><span class="out-triggers">SeasonTransition event</span><span class="out-updates">Modifier cache refresh</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">02</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Weather Roll</div><div class="tick-freq">WEEKLY · PROBABILISTIC · Seeded per run</div><p>Roll against the current season's extreme weather probability table. Results write to WorldWeatherState and modify all ecology calculations for the coming week. This is where the roguelike variance enters the simulation.</p><div class="outputs"><span class="out-updates">WorldWeatherState</span><span class="out-triggers">ExtremeWeatherEvent if triggered</span><span class="out-reads">Reads SeasonModifierTable</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">03</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Ecology Tick</div><div class="tick-freq">WEEKLY · BATCHED PARALLEL · EcologySimulator</div><p>Update all WorldTile ecological values. Tiles are independent — run with ParallelFor. Fauna migration resolved in a second sequential pass.</p><div class="outputs"><span class="out-updates">Tile.Biomass</span><span class="out-updates">FaunaPopulation</span><span class="out-updates">SoilFertility</span><span class="out-updates">WaterLevel</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">04</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Resource Production Tick</div><div class="tick-freq">WEEKLY · PER SETTLEMENT · ResourceManager</div><p>Each settlement calculates resource production gated by ecology outputs. Stockpiles updated. Resources move, never appear from nothing.</p><div class="outputs"><span class="out-updates">Settlement.Stockpiles</span><span class="out-reads">Reads ecology outputs</span><span class="out-reads">Reads labour pool</span><span class="out-reads">Reads SeasonAvailability table</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">05</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Economy Tick — Prices &amp; Trade</div><div class="tick-freq">WEEKLY · PER MARKET · EconomySubsystem</div><p>Recalculate commodity prices per market. Run NPC merchant AI. Apply faction hoarding logic and seasonal trade route passability.</p><div class="outputs"><span class="out-updates">CommodityPriceTable</span><span class="out-updates">MerchantPositions</span><span class="out-reads">Reads stockpiles</span><span class="out-reads">Reads route passability</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">06</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Population Tick</div><div class="tick-freq">MONTHLY · PER SETTLEMENT · PopulationSimulator</div><p>Apply births, deaths, starvation, disease. Calculate net migration. Update morale. Check revolt thresholds.</p><div class="outputs"><span class="out-updates">Settlement.Population</span><span class="out-updates">Settlement.Morale</span><span class="out-triggers">FamineEvent if threshold</span><span class="out-triggers">RevoltEvent if morale &lt; 10</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">07</div><div class="tick-line"></div></div><div class="tick-body"><div class="tick-title">Threat Evaluation</div><div class="tick-freq">WEEKLY · PER REGION</div><p>Evaluate bandit spawn, wolf aggression, disease outbreak risk. All threats trace to simulation root causes — not scripted timers.</p><div class="outputs"><span class="out-triggers">BanditGroupSpawn</span><span class="out-triggers">WolfPackAggression</span><span class="out-triggers">DiseaseOutbreak</span><span class="out-reads">Reads population stress</span></div></div></div>
+    <div class="tick-step"><div class="tick-left"><div class="tick-circle">08</div></div><div class="tick-body"><div class="tick-title">Player &amp; World Event Resolution</div><div class="tick-freq">CONTINUOUS · EVENT-DRIVEN · SimulationEventBus</div><p>All simulation events gate into quest availability and NPC dialogue state. The roguelike is the simulation, experienced from one character's perspective.</p><div class="outputs"><span class="out-drives">Quest availability</span><span class="out-drives">NPC dialogue state</span><span class="out-drives">Market prices visible</span><span class="out-drives">World visual state</span></div></div></div>
+  </div>
+</div>
+
+<!-- IMPACT MATRIX -->
+<div class="view" id="view-matrix">
+  <p class="section-label">Quantified season effects across simulation variables</p>
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead><tr><th class="row-head">VARIABLE</th><th><span class="th-sp">🌱 Spring</span></th><th><span class="th-su">☀️ Summer</span></th><th><span class="th-fa">🍂 Autumn</span></th><th><span class="th-wi">❄️ Winter</span></th></tr></thead>
+      <tbody>
+        <tr><td class="row-head">FOOD AVAILABILITY</td><td><span class="dn">▼ Scarce</span> — winter stocks empty</td><td><span class="up">▲ Good</span> — forage, early crops</td><td><span class="up">▲▲ Peak</span> — harvest window</td><td><span class="dn">▼▼ Critical</span> — stored only</td></tr>
+        <tr><td class="row-head">GRAIN PRICE MODIFIER</td><td><span class="dn">3–4×</span> base (scarcity peak)</td><td><span class="nt">1–1.5×</span> base (adequate)</td><td><span class="up">0.8×</span> (post-harvest glut)</td><td><span class="dn">2–5×</span> if harvest was poor</td></tr>
+        <tr><td class="row-head">TRADE ROUTE PASSABILITY</td><td><span class="dn">50%</span> — mud, flooding</td><td><span class="up">100%</span> — peak travel</td><td><span class="up">90%</span> — mostly good</td><td><span class="dn">20%</span> — snow, ice</td></tr>
+        <tr><td class="row-head">BANDIT ACTIVITY</td><td><span class="dn">High</span> — hungry winter survivors</td><td><span class="up">Low</span> — people employed</td><td><span class="dn">High</span> — harvest raids</td><td><span class="nt">Med</span> — isolated attacks</td></tr>
+        <tr><td class="row-head">WOLF / PREDATOR AGGRESSION</td><td><span class="nt">Med</span> — bear emergence</td><td><span class="up">Low</span> — prey abundant</td><td><span class="nt">Med</span> — pre-winter push</td><td><span class="dn">High</span> — desperate, bold</td></tr>
+        <tr><td class="row-head">DISEASE RISK</td><td><span class="dn">High</span> — waterborne, thaw filth</td><td><span class="nt">Med</span> — malaria near water</td><td><span class="up">Low</span> — cool, dry</td><td><span class="dn">High</span> — crowded, cold</td></tr>
+        <tr><td class="row-head">POPULATION MORALE</td><td><span class="up">Rising</span> — hope, longer days</td><td><span class="up">Peak</span> — fed, fairs, festivals</td><td><span class="nt">Anxious</span> — harvest risk</td><td><span class="dn">Low</span> — dark, cold, hungry</td></tr>
+        <tr><td class="row-head">LABOUR AVAILABILITY</td><td><span class="nt">Med</span> — weak after winter</td><td><span class="up">Peak</span> — long days, all active</td><td><span class="up">High</span> — harvest urgency</td><td><span class="dn">Low</span> — cold limits outdoor work</td></tr>
+        <tr><td class="row-head">LIVESTOCK HEALTH</td><td><span class="up">Recovering</span> — pasture opens</td><td><span class="up">Peak</span> — summer grazing</td><td><span class="nt">Stable</span> — pre-slaughter</td><td><span class="dn">Declining</span> — fodder limits</td></tr>
+        <tr><td class="row-head">FUEL DEMAND</td><td><span class="nt">Med</span> — still cold nights</td><td><span class="up">Low</span> — warm</td><td><span class="nt">Rising</span> — cutting season</td><td><span class="dn">Critical</span> — survival necessity</td></tr>
+        <tr><td class="row-head">REVOLT RISK</td><td><span class="dn">High</span> — famine residue</td><td><span class="up">Low</span> — people fed and busy</td><td><span class="nt">Med</span> — tithe tension</td><td><span class="dn">High</span> — hunger + cold + dark</td></tr>
+        <tr><td class="row-head">CROP GROWTH STATE</td><td><span class="up">Planting</span></td><td><span class="up">Growing</span> — peak growth</td><td><span class="up">Harvest</span> — yield realised</td><td><span class="dn">Dormant</span> — nothing growing</td></tr>
+        <tr><td class="row-head">SALT DEMAND</td><td><span class="nt">Normal</span></td><td><span class="nt">Normal</span></td><td><span class="dn">Surge</span> — slaughter &amp; preservation</td><td><span class="nt">Normal</span> — stocks held</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- UE5 ARCHITECTURE -->
+<div class="view" id="view-arch">
+  <p class="section-label">Unreal Engine 5.7 component architecture — how to implement this system</p>
+  <div class="arch-layout">
+    <div class="arch-list">
+      <div class="arch-btn active" onclick="showArch('season',this)"><span class="ab-name">SeasonSubsystem</span><span class="ab-type">UWorldSubsystem · C++</span></div>
+      <div class="arch-btn" onclick="showArch('modifier',this)"><span class="ab-name">SeasonModifierTable</span><span class="ab-type">UDataTable · Data Asset</span></div>
+      <div class="arch-btn" onclick="showArch('worldtile',this)"><span class="ab-name">WorldTileComponent</span><span class="ab-type">UActorComponent · C++</span></div>
+      <div class="arch-btn" onclick="showArch('ecology',this)"><span class="ab-name">EcologySimulator</span><span class="ab-type">UWorldSubsystem · C++</span></div>
+      <div class="arch-btn" onclick="showArch('resource',this)"><span class="ab-name">ResourceManager</span><span class="ab-type">UGameInstanceSubsystem</span></div>
+      <div class="arch-btn" onclick="showArch('economy',this)"><span class="ab-name">EconomySubsystem</span><span class="ab-type">UWorldSubsystem · C++</span></div>
+      <div class="arch-btn" onclick="showArch('population',this)"><span class="ab-name">PopulationSimulator</span><span class="ab-type">UWorldSubsystem · C++</span></div>
+      <div class="arch-btn" onclick="showArch('eventbus',this)"><span class="ab-name">SimulationEventBus</span><span class="ab-type">UGameInstanceSubsystem</span></div>
+    </div>
+    <div>
+      <div class="arch-detail active" id="arch-season">
+        <div class="ad-title">SeasonSubsystem</div><div class="ad-type">UWorldSubsystem · C++ · Server Authority Only</div>
+        <div class="ad-desc">The root of the entire simulation. Lives on the server as a UWorldSubsystem — one instance per world, auto-created by UE5. All other systems subscribe via the SimulationEventBus. Never called directly from gameplay code.</div>
+        <table class="props-table"><thead><tr><th>PROPERTY</th><th>TYPE</th><th>NOTES</th></tr></thead><tbody>
+          <tr><td class="prop-name">CurrentSeason</td><td class="prop-type">ESeasonType</td><td class="prop-note">Spring / Summer / Autumn / Winter</td></tr>
+          <tr><td class="prop-name">SeasonStartTime</td><td class="prop-type">FDateTime</td><td class="prop-note">UTC server time</td></tr>
+          <tr><td class="prop-name">SeasonDurationDays</td><td class="prop-type">float</td><td class="prop-note">Config-driven. 7–30 real days. Recommendation: 14</td></tr>
+          <tr><td class="prop-name">YearNumber</td><td class="prop-type">int32</td><td class="prop-note">In-game year — drives long-arc events and legacy scaling</td></tr>
+          <tr><td class="prop-name">TransitionPhase</td><td class="prop-type">ETransitionPhase</td><td class="prop-note">Active / Warning (48hr) / Transitioning</td></tr>
+          <tr><td class="prop-name">bAdminOverride</td><td class="prop-type">bool</td><td class="prop-note">Locks season for testing / scripted events</td></tr>
+        </tbody></table>
+        <div class="dep-section"><h4>EVENTS DISPATCHED</h4><div class="dep-row"><span class="dep dep-evt">OnSeasonChanged</span><span class="dep dep-evt">OnSeasonWarning</span><span class="dep dep-evt">OnSeasonTick (daily)</span><span class="dep dep-evt">OnYearRollover</span></div></div>
+      </div>
+      <div class="arch-detail" id="arch-modifier">
+        <div class="ad-title">SeasonModifierTable</div><div class="ad-type">UDataTable · FSeasonModifierRow struct · Designer-Editable</div>
+        <div class="ad-desc">A data-driven table of all numerical modifiers applied by each season. Every system reads from this table rather than hardcoding season checks. Designers can tune the entire simulation without touching C++.</div>
+        <table class="props-table"><thead><tr><th>FIELD</th><th>TYPE</th><th>NOTES</th></tr></thead><tbody>
+          <tr><td class="prop-name">Season</td><td class="prop-type">ESeasonType</td><td class="prop-note">Which season this row applies to</td></tr>
+          <tr><td class="prop-name">TargetSystem</td><td class="prop-type">ESimSystem</td><td class="prop-note">Ecology / Resources / Economy / Population</td></tr>
+          <tr><td class="prop-name">StatKey</td><td class="prop-type">FName</td><td class="prop-note">"ForageYieldMult", "BanditSpawnRate", etc.</td></tr>
+          <tr><td class="prop-name">ModifierType</td><td class="prop-type">EModType</td><td class="prop-note">Multiply / Add / Override</td></tr>
+          <tr><td class="prop-name">Value</td><td class="prop-type">float</td><td class="prop-note">0.8 = −20%, 1.3 = +30%</td></tr>
+          <tr><td class="prop-name">BiomeFilter</td><td class="prop-type">TArray&lt;EBiomeType&gt;</td><td class="prop-note">Empty = applies globally to all biomes</td></tr>
+        </tbody></table>
+      </div>
+      <div class="arch-detail" id="arch-worldtile">
+        <div class="ad-title">WorldTileComponent</div><div class="ad-type">UActorComponent · Attached to ATileActor</div>
+        <div class="ad-desc">Each region of the world map is an ATileActor with a WorldTileComponent holding ecological and resource state for that tile. Updated by EcologySimulator each weekly tick.</div>
+        <table class="props-table"><thead><tr><th>PROPERTY</th><th>TYPE</th><th>NOTES</th></tr></thead><tbody>
+          <tr><td class="prop-name">Biome</td><td class="prop-type">EBiomeType</td><td class="prop-note">Forest / Plains / Wetland / Upland / Coastal</td></tr>
+          <tr><td class="prop-name">Biomass</td><td class="prop-type">float 0–100</td><td class="prop-note">Flora density. Gates forage yield and cover</td></tr>
+          <tr><td class="prop-name">SoilFertility</td><td class="prop-type">float 0–100</td><td class="prop-note">Crop yield multiplier for farm plots here</td></tr>
+          <tr><td class="prop-name">WaterLevel</td><td class="prop-type">float 0–100</td><td class="prop-note">0=drought, 50=normal, 100=flood</td></tr>
+          <tr><td class="prop-name">FaunaPopulation</td><td class="prop-type">TMap&lt;EAnimal,int32&gt;</td><td class="prop-note">Per-species counts. Drives hunt yield</td></tr>
+          <tr><td class="prop-name">TraversalPenalty</td><td class="prop-type">float 0–1</td><td class="prop-note">Computed from water + weather + season</td></tr>
+          <tr><td class="prop-name">ActiveResourceNodes</td><td class="prop-type">TArray&lt;FResourceNode&gt;</td><td class="prop-note">What can be harvested this season on this tile</td></tr>
+        </tbody></table>
+      </div>
+      <div class="arch-detail" id="arch-ecology">
+        <div class="ad-title">EcologySimulator</div><div class="ad-type">UWorldSubsystem · C++ · Weekly Batch Tick</div>
+        <div class="ad-desc">Iterates all WorldTileComponents and applies seasonal growth and decay formulas. Runs on UE5's TaskGraph background thread — tiles are independent, making this embarrassingly parallel. Fauna migration resolved in a second sequential pass.</div>
+        <div class="dep-section"><h4>INPUTS</h4><div class="dep-row"><span class="dep dep-in">SeasonModifierTable cache</span><span class="dep dep-in">WorldWeatherState</span><span class="dep dep-in">All WorldTileComponents</span></div></div>
+        <div class="dep-section" style="margin-top:12px"><h4>OUTPUTS</h4><div class="dep-row"><span class="dep dep-out">Updated Biomass</span><span class="dep dep-out">Updated FaunaPopulation</span><span class="dep dep-out">Updated WaterLevel</span><span class="dep dep-out">Updated SoilFertility</span></div></div>
+      </div>
+      <div class="arch-detail" id="arch-resource">
+        <div class="ad-title">ResourceManager</div><div class="ad-type">UGameInstanceSubsystem · Persistent Across Levels</div>
+        <div class="ad-desc">Manages all resource stockpiles. Lives on GameInstance so it survives level loads. The roguelike save state includes this serialised to disk. Resources are conserved — they move, never appear from nothing.</div>
+        <table class="props-table"><thead><tr><th>PROPERTY</th><th>TYPE</th><th>NOTES</th></tr></thead><tbody>
+          <tr><td class="prop-name">SettlementStockpiles</td><td class="prop-type">TMap&lt;FGuid, FStockpile&gt;</td><td class="prop-note">Keyed by settlement GUID</td></tr>
+          <tr><td class="prop-name">GlobalCommodityPool</td><td class="prop-type">TMap&lt;EResource,float&gt;</td><td class="prop-note">World totals for economy calculation</td></tr>
+          <tr><td class="prop-name">SeasonalAvailability</td><td class="prop-type">TMap&lt;EResource,FSeasonMask&gt;</td><td class="prop-note">Which seasons can produce this resource</td></tr>
+        </tbody></table>
+      </div>
+      <div class="arch-detail" id="arch-economy">
+        <div class="ad-title">EconomySubsystem</div><div class="ad-type">UWorldSubsystem · C++ · Weekly Tick</div>
+        <div class="ad-desc">Runs price simulation and NPC merchant AI. Output prices are exactly what the player sees in shops and markets.</div>
+        <div class="dep-section"><h4>PRICE FORMULA</h4><p style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--accent);margin-top:6px;padding:10px;background:var(--surface2);border-radius:2px;line-height:1.8;">Price = BaseCost × (ExpectedDemand ÷ CurrentStock) × SeasonPressure<br>Clamp(0.5×, 5.0×) · Rolling 4-week demand average</p></div>
+        <div class="dep-section" style="margin-top:12px"><h4>INPUTS / OUTPUTS</h4><div class="dep-row"><span class="dep dep-in">ResourceManager stockpiles</span><span class="dep dep-in">SeasonModifierTable</span><span class="dep dep-in">Route passability</span></div><div class="dep-row" style="margin-top:6px"><span class="dep dep-out">CommodityPriceTable</span><span class="dep dep-out">MerchantPositions</span><span class="dep dep-out">FactionWealthDelta</span></div></div>
+      </div>
+      <div class="arch-detail" id="arch-population">
+        <div class="ad-title">PopulationSimulator</div><div class="ad-type">UWorldSubsystem · C++ · Monthly Tick</div>
+        <div class="ad-desc">The human consequence layer. Updates population, morale, and health per settlement monthly. Checks starvation thresholds, revolt conditions, migration triggers.</div>
+        <table class="props-table"><thead><tr><th>PROPERTY</th><th>TYPE</th><th>NOTES</th></tr></thead><tbody>
+          <tr><td class="prop-name">Population</td><td class="prop-type">int32</td><td class="prop-note">Adults and children tracked separately</td></tr>
+          <tr><td class="prop-name">Morale</td><td class="prop-type">float 0–100</td><td class="prop-note">Below 10 = revolt triggered</td></tr>
+          <tr><td class="prop-name">FoodPerCapita</td><td class="prop-type">float</td><td class="prop-note">Daily. Below 0.6 for 4 weeks = starvation</td></tr>
+          <tr><td class="prop-name">DiseaseLoad</td><td class="prop-type">float 0–1</td><td class="prop-note">Drives monthly additional death rate</td></tr>
+          <tr><td class="prop-name">LabourPool</td><td class="prop-type">int32</td><td class="prop-note">Fit adults available for seasonal work</td></tr>
+        </tbody></table>
+      </div>
+      <div class="arch-detail" id="arch-eventbus">
+        <div class="ad-title">SimulationEventBus</div><div class="ad-type">UGameInstanceSubsystem · Delegate Hub</div>
+        <div class="ad-desc">The connective tissue of the entire simulation. All systems publish events here; all gameplay systems subscribe here. Decouples simulation from game — run headlessly without any gameplay code. Critical for testing and emergent narrative generation.</div>
+        <div class="dep-section"><h4>KEY EVENTS</h4><div class="dep-row" style="flex-direction:column;gap:7px;">
+          <span class="dep dep-evt" style="width:fit-content">OnSeasonChanged(ESeasonType NewSeason)</span>
+          <span class="dep dep-evt" style="width:fit-content">OnFamineStarted(FGuid SettlementId)</span>
+          <span class="dep dep-evt" style="width:fit-content">OnRevoltTriggered(FGuid SettlementId)</span>
+          <span class="dep dep-evt" style="width:fit-content">OnWeatherEvent(EWeatherType, FGuid TileId)</span>
+          <span class="dep dep-evt" style="width:fit-content">OnResourceDepleted(EResource, FGuid RegionId)</span>
+          <span class="dep dep-evt" style="width:fit-content">OnPopulationCrisis(FGuid SettlementId, ECrisisType)</span>
+        </div></div>
+        <div class="dep-section" style="margin-top:14px"><h4>DESIGN PRINCIPLE</h4><p style="font-size:13px;color:var(--dim);line-height:1.7;margin-top:6px;">The EventBus is the only cross-system coupling point. SeasonSubsystem does not know EconomySubsystem exists. Every system is independently testable and swappable. For a two-dev team: develop systems in parallel without stepping on each other.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div>
+<script>
+function showView(id,btn){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('view-'+id).classList.add('active');btn.classList.add('active')}
+function showSeason(id,btn){document.querySelectorAll('.spanel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.snav-btn').forEach(b=>b.classList.remove('active'));document.getElementById('spanel-'+id).classList.add('active');btn.classList.add('active')}
+function showSystem(id,btn){document.querySelectorAll('.sys-panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.sys-btn').forEach(b=>b.classList.remove('active'));document.getElementById('sys-'+id).classList.add('active');btn.classList.add('active')}
+function showArch(id,btn){document.querySelectorAll('.arch-detail').forEach(d=>d.classList.remove('active'));document.querySelectorAll('.arch-btn').forEach(b=>b.classList.remove('active'));document.getElementById('arch-'+id).classList.add('active');btn.classList.add('active')}
+</script>
+</body>
+</html>

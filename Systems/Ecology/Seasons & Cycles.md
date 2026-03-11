@@ -20,6 +20,11 @@ The primary simulation clock. All living systems tick relative to the seasonal c
 
 ---
 
+## Simulation Drawing
+
+![[seasons-system-map.svg]]
+
+---
 ## Simulation Layers
 
 The season system drives five nested layers. Each layer depends on the one above it — ecology sets the conditions that resources respond to, resources drive economic pressure, economic pressure shapes population outcomes, and population stress produces world events.
@@ -28,10 +33,24 @@ The season system drives five nested layers. Each layer depends on the one above
 
 The ecological baseline. Drives all downstream layers.
 
-- **Flora:** Biomass growth rates, crop viability windows, forest regrowth speed
+- **Flora:** Biomass growth rates (0–100 scale per tile): spring +8/wk, summer +4, autumn −3, winter −12. Biomass gates forage yield, animal populations, cover. Deforestation is permanent without active replanting.
 - **Fauna:** Population cycles, migration patterns, predator/prey balance
 - **Soil & Water:** Fertility levels, river flow, flood/drought state
 - **Weather Events (rolls):** Flood, drought, late frost, blight, blizzard, river freeze
+
+**Weather probability table (per-season rolls):**
+
+| Season | Event | Probability |
+|---|---|---|
+| Spring | Flood | 15% |
+| Spring | Late frost | 20% |
+| Summer | Drought | 18% |
+| Summer | Crop blight | 8% |
+| Autumn | Early frost | 25% |
+| Autumn | Wet harvest | 30% |
+| Winter | Blizzard | 35% |
+
+Events chain: drought → blight → famine → revolt.
 
 ### L2 — Base Resources
 
@@ -68,7 +87,7 @@ Prices and trade flow respond to seasonal resource state.
 
 Population responds to accumulated economic and ecological pressure.
 
-- **Morale:** 0–100 scale. Below 10 → revolt
+- **Morale:** 0–100 scale. Below 20 → passive resistance (lower tax yield, slower labour). Below 10 → revolt (granary burning, killing of tax collectors). **Revolts are contagious — spread to neighbouring settlements within 2 weeks.**
 - **Starvation threshold:** < 0.6 food/day sustained for 4 weeks
 - **Seasonal mortality:** Winter spikes elderly and infant death; spring dysentery; summer malaria
 - **Migration:** Population flees famine conditions, follows available food
@@ -86,6 +105,22 @@ Emergent threats that trace back to simulation root causes — no scripted event
 - **War / Bandits** — faction pressure + resource competition (L3) + population desperation (L4)
 
 > All threats trace to simulation root causes — no scripted events, no monsters.
+
+---
+
+## Biome Season Response
+
+Biomes respond differently to the same season state. `SeasonModifierTable` has a `BiomeFilter` field to apply per-biome overrides.
+
+| Biome | Winter Severity | Key Resources | Disease Risk |
+|---|---|---|---|
+| Forest | Moderate | Timber, game, forage | Low |
+| Plains | Moderate | Grain, livestock | Low |
+| Wetland | Moderate | Peat fuel, fish | High (year-round) |
+| Upland | Severe | Stone, sheep, peat | Low |
+| Coastal | Mild | Fish, salt, trade | Med |
+
+Upland: shorter growing season, harder winters. Coastal: milder winters, fog, fish-dominant. Wetland: highest disease risk, available peat fuel, poor farming. See [[Biomes Overview]] for full detail.
 
 ---
 
