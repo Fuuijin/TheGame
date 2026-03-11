@@ -4,5 +4,9 @@
   "obsidian-excalidraw-plugin",
   "obsidian-minimal-settings",
   "obsidian-hider",
-  "obsidian-local-rest-api"
+  "obsidian-local-rest-api",
+  "dataview",
+  "templater-obsidian",
+  "table-editor-obsidian",
+  "obsidian-kanban"
 ]

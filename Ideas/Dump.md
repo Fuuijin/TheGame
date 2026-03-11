@@ -25,3 +25,5 @@ Unstructured inbox for ideas, fragments, and sparks. Nothing here is committed.
 ---
 
 *Add new ideas below this line. Date optional.*
+
+[[Season & Cycles System]]

@@ -46,6 +46,7 @@ Engine: **UE 5.7** | Team: 2 devs + AI | Map: 40×40 km
 ## Tech
 
 - [[UE5]] — UE 5.7 notes, constraints, tools
+- [[Löve2d]]  — Löve2d, Lua game engine for quick prototypes.
 
 ---
 
