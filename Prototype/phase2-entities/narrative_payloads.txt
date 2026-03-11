@@ -1,0 +1,208 @@
+=== NARRATIVE PAYLOADS ===
+Each entry is a structured prompt for LLM narrative generation.
+hop_count=0: original perspective. Higher = context degraded.
+
+[1] EVENT: protected_villager  |  hop=0
+  ACTOR:    Shepherd Nell  [gentle, compassionate]  prom=15  in Stonekeep
+  CONTEXT:  season=Winter, week=8, year=3, fauna_pop=20.512033729361
+  PROMPT:   Write 2-3 sentences from Shepherd Nell's perspective.
+
+[2] EVENT: charitable_act  |  hop=0
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=38  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=4, year=4, grain_weeks=2.1
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[3] EVENT: public_confrontation  |  hop=0
+  ACTOR:    Watchman Garrett  [brave, impulsive]  prom=20  in Stonekeep
+  WITNESS:  Shepherd Nell  [gentle, compassionate]
+  CONTEXT:  season=Spring, week=1, year=5, grain_weeks=2.2
+  PROMPT:   Write 2-3 sentences from Watchman Garrett's perspective.
+
+[4] EVENT: public_confrontation  |  hop=0
+  ACTOR:    Boatman Piers  [impulsive, brave]  prom=20  in Brackenmere
+  WITNESS:  Elder Marta  [gossip, gentle]
+  CONTEXT:  season=Summer, week=3, year=5, grain_weeks=0.6
+  PROMPT:   Write 2-3 sentences from Boatman Piers's perspective.
+
+[5] EVENT: public_confrontation  |  hop=2
+  ACTOR:    Boatman Piers  [impulsive, brave]  prom=23  in Brackenmere
+  WITNESS:  Elder Marta  [gossip, gentle]
+  RETELLER: Trader Odo  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=3, year=5
+  PROMPT:   Write 2-3 sentences from Boatman Piers's perspective.
+
+[6] EVENT: charitable_act  |  hop=0
+  ACTOR:    Herbalist Wren  [compassionate, discretion]  prom=28  in Millhaven
+  WITNESS:  Headman Tomas  [law_order, cautious]
+  CONTEXT:  season=Summer, week=3, year=5, grain_weeks=1.5
+  PROMPT:   Write 2-3 sentences from Herbalist Wren's perspective.
+
+[7] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=45  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=3, year=5, grain_weeks=2.0
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[8] EVENT: charitable_act  |  hop=2
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=48  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=3, year=5
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[9] EVENT: charitable_act  |  hop=0
+  ACTOR:    Herbalist Wren  [compassionate, discretion]  prom=33  in Millhaven
+  WITNESS:  Headman Tomas  [law_order, cautious]
+  CONTEXT:  season=Summer, week=4, year=5, grain_weeks=1.2
+  PROMPT:   Write 2-3 sentences from Herbalist Wren's perspective.
+
+[10] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=53  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=4, year=5, grain_weeks=1.5
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[11] EVENT: charitable_act  |  hop=1
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=53  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Miller Agnes  [gossip, compassionate]  (degraded context)
+  CONTEXT:  season=Summer, week=4, year=5, grain_weeks=1.5
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[12] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=47  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Spring, week=2, year=6, grain_weeks=2.1
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[13] EVENT: charitable_act  |  hop=2
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=50  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Spring, week=2, year=6
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[14] EVENT: charitable_act  |  hop=0
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=38  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=3, year=6, grain_weeks=1.6
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[15] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=49  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=3, year=6, grain_weeks=1.6
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[16] EVENT: charitable_act  |  hop=1
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=49  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Miller Agnes  [gossip, compassionate]  (degraded context)
+  CONTEXT:  season=Summer, week=3, year=6, grain_weeks=1.6
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[17] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=48  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=4, year=6, grain_weeks=1.7
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[18] EVENT: charitable_act  |  hop=2
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=51  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=4, year=6
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[19] EVENT: charitable_act  |  hop=2
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=54  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=4, year=6
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[20] EVENT: protected_villager  |  hop=0
+  ACTOR:    Shepherd Nell  [gentle, compassionate]  prom=15  in Stonekeep
+  CONTEXT:  season=Winter, week=8, year=6, fauna_pop=12.467329932211
+  PROMPT:   Write 2-3 sentences from Shepherd Nell's perspective.
+
+[21] EVENT: charitable_act  |  hop=0
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=38  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=3, year=7, grain_weeks=1.4
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[22] EVENT: charitable_act  |  hop=0
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=38  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=4, year=7, grain_weeks=0.9
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[23] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=46  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=4, year=7, grain_weeks=0.9
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[24] EVENT: protected_villager  |  hop=0
+  ACTOR:    Shepherd Nell  [gentle, compassionate]  prom=15  in Stonekeep
+  CONTEXT:  season=Winter, week=8, year=7, fauna_pop=17.367256720068
+  PROMPT:   Write 2-3 sentences from Shepherd Nell's perspective.
+
+[25] EVENT: charitable_act  |  hop=0
+  ACTOR:    Herbalist Wren  [compassionate, discretion]  prom=28  in Millhaven
+  WITNESS:  Headman Tomas  [law_order, cautious]
+  CONTEXT:  season=Spring, week=1, year=8, grain_weeks=0.7
+  PROMPT:   Write 2-3 sentences from Herbalist Wren's perspective.
+
+[26] EVENT: charitable_act  |  hop=0
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=38  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Spring, week=2, year=8, grain_weeks=2.3
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[27] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=45  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Spring, week=2, year=8, grain_weeks=2.3
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[28] EVENT: charitable_act  |  hop=0
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=38  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=3, year=8, grain_weeks=2.3
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[29] EVENT: charitable_act  |  hop=2
+  ACTOR:    Miller Agnes  [gossip, compassionate]  prom=41  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=3, year=8
+  PROMPT:   Write 2-3 sentences from Miller Agnes's perspective.
+
+[30] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=45  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=3, year=8, grain_weeks=2.3
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[31] EVENT: charitable_act  |  hop=0
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=45  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  CONTEXT:  season=Summer, week=4, year=8, grain_weeks=2.4
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[32] EVENT: charitable_act  |  hop=2
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=48  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=4, year=8
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
+
+[33] EVENT: charitable_act  |  hop=2
+  ACTOR:    Father Cormac  [compassionate, discretion]  prom=51  in Ashford
+  WITNESS:  Lord Edmund  [law_order, greedy]
+  RETELLER: Merchant Ida  [greedy, loudmouth]  (degraded context)
+  CONTEXT:  season=Summer, week=4, year=8
+  PROMPT:   Write 2-3 sentences from Father Cormac's perspective.
