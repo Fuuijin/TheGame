@@ -105,6 +105,7 @@ This gives geography a social dimension. Settlements with active markets or well
 - **[[Relations]]** — personal standing between named characters is shaped by what reputation events have reached them
 - **[[Factions]]** — faction-level reputation is the aggregate of many propagated reputation events over time
 - **[[Legacy System]]** — infamy or honour that reached wide propagation can leave marks the next generation inherits
+- **[[Narrative Layer]]** — when a story reaches a public venue or named character, it is queued for LLM narrative generation; the hop count passed to the generator determines how much context survives
 
 ---
 

@@ -66,6 +66,7 @@ The simulation should produce villains and heroes with equal indifference. It ha
 ## Interaction with Other Systems
 
 - **[[Reputation & Propagation]]** — the mechanism by which influence is spread and stories are carried or lost
+- **[[Narrative Layer]]** — high-influence characters increase the chance that events involving them are queued for narrative generation and consumed in-world rather than buried in the codex
 - **[[Relations]]** — named characters have personal standing with other named characters and with the player
 - **[[Legacy System]]** — influence accumulated in one life can leave marks that affect the starting conditions of the next
 - **[[Factions]]** — high-influence individuals become faction anchors; their actions shift faction-level standing

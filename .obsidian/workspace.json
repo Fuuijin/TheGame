@@ -243,22 +243,24 @@
   },
   "active": "ab3ca35965798f2d",
   "lastOpenFiles": [
+    "Systems/Social/Influence.md.tmp.8715.1773258290695",
+    "Systems/Social/Reputation & Propagation.md.tmp.8715.1773258284305",
+    "Systems/Narrative Layer.md",
+    "Systems/Narrative Layer.md.tmp.8715.1773258272762",
+    "Systems/Ecology/Ecology Overview.md",
+    "Systems/Social/Influence.md",
     "Systems/Ecology/Seasons & Cycles.md",
     "Systems/Social/Social Overview.md.tmp.8419.1773255107424",
     "Systems/Social/Social Overview.md.tmp.8419.1773255102873",
     "Systems/Social/Reputation & Propagation.md",
     "Systems/Social/Reputation & Propagation.md.tmp.8419.1773255094219",
-    "Systems/Social/Influence.md",
     "Systems/Social/Influence.md.tmp.8419.1773255046521",
-    "Systems/Ecology/Ecology Overview.md",
     "Systems/Ecology/seasons-system-map.svg",
     "Prototype/phase1-headless/README.md",
     "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238540516",
     "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238533139",
     "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238527506",
     "Prototype/phase1-headless/systems/resource_manager.lua.tmp.7672.1773238451529",
-    "Prototype/phase1-headless/systems/season_subsystem.lua.tmp.7672.1773238442356",
-    "Prototype/phase1-headless/main.lua.tmp.7672.1773238336869",
     "Systems/Legacy System.md",
     "Experiments/Season & Cycles System.md",
     "Tech/Löve2d.md",
@@ -277,7 +279,6 @@
     "Systems/Social/Villages.md",
     "Systems/Social/Factions.md",
     "Systems/Social/Social Overview.md",
-    "Systems/Ecology/Wildlife.md",
-    "Systems/Ecology/Vegetation.md"
+    "Systems/Ecology/Wildlife.md"
   ]
 }
