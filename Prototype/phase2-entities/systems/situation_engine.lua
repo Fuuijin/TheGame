@@ -55,7 +55,10 @@ end
 
 -- ── Scarcity resolution ───────────────────────────────────────────────────────
 
+local SITUATION_COOLDOWN = 3  -- weeks before an entity may respond to another situation
+
 local function resolve_scarcity(entity, sid, weeks_left, ctx)
+    if entity.situation_cooldown > 0 then return end
     local r = math.random()
 
     -- GREEDY + IMPULSIVE → hoard / steal from neighbour
@@ -79,6 +82,7 @@ local function resolve_scarcity(entity, sid, weeks_left, ctx)
                     location=sid, ctx=ctx, infamy_delta=8,
                 })
                 EM.add_narrative_trait(entity, "hoarder", ctx, EventBus)
+                entity.situation_cooldown = SITUATION_COOLDOWN
                 log(string.format("[Y%d W%02d] %s (greedy+impulsive) seized grain during scarcity in %s",
                     ctx.year, ctx.week, entity.name, sid))
                 EventBus.fire("SITUATION_FIRED", {situation_type="hoarding_theft", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
@@ -95,6 +99,7 @@ local function resolve_scarcity(entity, sid, weeks_left, ctx)
                 location=sid, ctx=ctx, honour_delta=6,
             })
             EM.add_narrative_trait(entity, "generous_soul", ctx, EventBus)
+            entity.situation_cooldown = SITUATION_COOLDOWN
             log(string.format("[Y%d W%02d] %s (compassionate) shared stores during scarcity in %s",
                 ctx.year, ctx.week, entity.name, sid))
             EventBus.fire("SITUATION_FIRED", {situation_type="charitable_act", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
@@ -110,6 +115,7 @@ local function resolve_scarcity(entity, sid, weeks_left, ctx)
                     type="public_confrontation", actor=entity, witness=target,
                     location=sid, ctx=ctx, infamy_delta=3,
                 })
+                entity.situation_cooldown = SITUATION_COOLDOWN
                 log(string.format("[Y%d W%02d] %s (impulsive) caused a public confrontation in %s",
                     ctx.year, ctx.week, entity.name, sid))
                 -- Law-and-order witness responds
@@ -133,10 +139,43 @@ local function resolve_scarcity(entity, sid, weeks_left, ctx)
                     type="public_accusation", actor=entity, witness=other,
                     location=sid, ctx=ctx, honour_delta=5,
                 })
+                entity.situation_cooldown = SITUATION_COOLDOWN
                 log(string.format("[Y%d W%02d] %s (law_order) publicly accused %s in %s",
                     ctx.year, ctx.week, entity.name, other.name, sid))
                 break
             end
+        end
+
+    -- CAUTIOUS → organises quiet rationing; no drama, modest respect earned
+    elseif EM.has_trait(entity, "cautious") then
+        if r < 0.25 then
+            RS.record_event({
+                type="quiet_rationing", actor=entity, witness=others_in(sid, entity.id)[1],
+                location=sid, ctx=ctx, honour_delta=3,
+            })
+            entity.situation_cooldown = SITUATION_COOLDOWN
+            log(string.format("[Y%d W%02d] %s (cautious) organised quiet rationing in %s",
+                ctx.year, ctx.week, entity.name, sid))
+            EventBus.fire("SITUATION_FIRED", {situation_type="quiet_rationing", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
+        end
+
+    -- GENTLE → calms tensions quietly; prevents confrontations from escalating
+    elseif EM.has_trait(entity, "gentle") then
+        -- Check if anyone in the settlement recently caused trouble
+        local troublemaker = nil
+        for _, other in ipairs(others_in(sid, entity.id)) do
+            if other.infamy > 3 then troublemaker = other; break end
+        end
+        if troublemaker and r < 0.30 then
+            RS.record_event({
+                type="tensions_calmed", actor=entity, witness=troublemaker,
+                location=sid, ctx=ctx, honour_delta=4,
+            })
+            EM.add_narrative_trait(entity, "peacemaker", ctx, EventBus)
+            entity.situation_cooldown = SITUATION_COOLDOWN
+            log(string.format("[Y%d W%02d] %s (gentle) calmed tensions in %s",
+                ctx.year, ctx.week, entity.name, sid))
+            EventBus.fire("SITUATION_FIRED", {situation_type="tensions_calmed", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
         end
     end
 end
@@ -144,6 +183,7 @@ end
 -- ── Predator resolution ───────────────────────────────────────────────────────
 
 local function resolve_predator(entity, sid, fauna_pop, ctx)
+    if entity.situation_cooldown > 0 then return end
     local r = math.random()
 
     if EM.has_trait(entity, "brave") then
@@ -153,22 +193,36 @@ local function resolve_predator(entity, sid, fauna_pop, ctx)
                 location=sid, ctx=ctx, honour_delta=12,
             })
             EM.add_narrative_trait(entity, "wolf_fighter", ctx, EventBus)
+            entity.situation_cooldown = SITUATION_COOLDOWN
             log(string.format("[Y%d W%02d] %s (brave) drove off wildlife threatening %s",
                 ctx.year, ctx.week, entity.name, sid))
             EventBus.fire("SITUATION_FIRED", {situation_type="predator_confronted", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
         end
 
     elseif EM.has_trait(entity, "compassionate") then
-        -- Intervened to protect a villager
         if r < 0.35 then
             RS.record_event({
                 type="protected_villager", actor=entity, witness=nil,
                 location=sid, ctx=ctx, honour_delta=15,
             })
             EM.add_narrative_trait(entity, "protector", ctx, EventBus)
+            entity.situation_cooldown = SITUATION_COOLDOWN
             log(string.format("[Y%d W%02d] %s (compassionate) intervened to protect villagers in %s",
                 ctx.year, ctx.week, entity.name, sid))
             EventBus.fire("SITUATION_FIRED", {situation_type="protected_villager", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
+        end
+
+    elseif EM.has_trait(entity, "gentle") then
+        -- Guides livestock to safety quietly; not heroic but earns quiet respect
+        if r < 0.35 then
+            RS.record_event({
+                type="livestock_sheltered", actor=entity, witness=others_in(sid, entity.id)[1],
+                location=sid, ctx=ctx, honour_delta=6,
+            })
+            entity.situation_cooldown = SITUATION_COOLDOWN
+            log(string.format("[Y%d W%02d] %s (gentle) sheltered livestock from predators in %s",
+                ctx.year, ctx.week, entity.name, sid))
+            EventBus.fire("SITUATION_FIRED", {situation_type="livestock_sheltered", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
         end
 
     elseif EM.has_trait(entity, "cowardly") then
@@ -178,6 +232,7 @@ local function resolve_predator(entity, sid, fauna_pop, ctx)
                 location=sid, ctx=ctx, infamy_delta=5,
             })
             EM.add_narrative_trait(entity, "coward", ctx, EventBus)
+            entity.situation_cooldown = SITUATION_COOLDOWN
             log(string.format("[Y%d W%02d] %s (cowardly) fled when wildlife threatened %s",
                 ctx.year, ctx.week, entity.name, sid))
             EventBus.fire("SITUATION_FIRED", {situation_type="fled_danger", settlement_id=sid, week=ctx.week, year=ctx.year, season=ctx.season})
@@ -189,7 +244,8 @@ end
 
 local function check_surplus(sid, week, year, season)
     local grain = (ResourceManager.stocks[sid] or {}).Grain or 0
-    if grain < 70 then return end
+    local surplus_thresh = (CONFIG and CONFIG.surplus_threshold) or 70
+    if grain < surplus_thresh then return end
     local entities = EM.by_settlement[sid] or {}
     for _, entity in ipairs(entities) do
         if EM.has_trait(entity, "generous") and math.random() < 0.30 then
@@ -213,8 +269,9 @@ function SituationEngine.weekly_tick(week, year, season)
         local ctx = {week=week, year=year, season=season, location=sid}
 
         -- SCARCITY
+        local scarcity_thresh = (CONFIG and CONFIG.scarcity_threshold) or 2.5
         local wg = weeks_of_grain(sid)
-        if wg > 0.3 and wg < 2.5 then
+        if wg > 0.3 and wg < scarcity_thresh then
             for _, entity in ipairs(EM.by_settlement[sid] or {}) do
                 ctx.grain_weeks = wg
                 resolve_scarcity(entity, sid, wg, ctx)
@@ -222,9 +279,10 @@ function SituationEngine.weekly_tick(week, year, season)
         end
 
         -- PREDATOR_NEAR (autumn/winter only when fauna hungry)
+        local predator_forage = (CONFIG and CONFIG.predator_min_forage) or 20
         if season == "Autumn" or season == "Winter" then
             local tile = get_tile_for_settlement(sid)
-            if tile and tile.fauna_pop > 2 and tile.biomass < 12 then
+            if tile and tile.fauna_pop > 2 and tile.biomass < predator_forage then
                 for _, entity in ipairs(EM.by_settlement[sid] or {}) do
                     ctx.fauna_pop = tile.fauna_pop
                     resolve_predator(entity, sid, tile.fauna_pop, ctx)

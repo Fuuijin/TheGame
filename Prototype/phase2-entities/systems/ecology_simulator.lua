@@ -11,12 +11,21 @@ local EcologySimulator = {}
 -- Biome definitions
 -- winter_severity: multiplier applied to winter biomass loss (1.0 = standard)
 -- disease_risk:    base weekly disease roll added to PopulationSimulator
+-- flood_mult:      multiplier on flood water_level rise and soil damage
+-- drought_mult:    multiplier on drought stress accumulation
+-- blizzard_mult:   multiplier on blizzard biomass and fauna damage
 local BIOMES = {
-    Forest  = { winter_severity = 1.0, disease_risk = 0.02, base_biomass = 80 },
-    Plains  = { winter_severity = 1.0, disease_risk = 0.02, base_biomass = 60 },
-    Wetland = { winter_severity = 1.0, disease_risk = 0.08, base_biomass = 55 },
-    Upland  = { winter_severity = 1.4, disease_risk = 0.02, base_biomass = 45 },
-    Coastal = { winter_severity = 0.7, disease_risk = 0.04, base_biomass = 50 },
+    --              winter  disease  biomass  flood  drought  blizzard
+    Forest  = { winter_severity=1.0, disease_risk=0.02, base_biomass=80,
+                flood_mult=0.8,  drought_mult=0.7,  blizzard_mult=1.0 },
+    Plains  = { winter_severity=1.0, disease_risk=0.02, base_biomass=60,
+                flood_mult=1.0,  drought_mult=1.3,  blizzard_mult=0.9 },
+    Wetland = { winter_severity=1.0, disease_risk=0.08, base_biomass=55,
+                flood_mult=1.8,  drought_mult=0.3,  blizzard_mult=0.8 },
+    Upland  = { winter_severity=1.4, disease_risk=0.02, base_biomass=45,
+                flood_mult=0.4,  drought_mult=1.1,  blizzard_mult=1.6 },
+    Coastal = { winter_severity=0.7, disease_risk=0.04, base_biomass=50,
+                flood_mult=1.4,  drought_mult=0.8,  blizzard_mult=0.7 },
 }
 
 -- Tile state shape:
@@ -139,22 +148,27 @@ function EcologySimulator._on_weather_event(data)
     local sev = data.severity or 1  -- 1..3
 
     for id, tile in pairs(EcologySimulator.tiles) do
+        local bd = BIOMES[tile.biome] or BIOMES.Plains
+
         if evt == "Flood" then
-            tile.water_level  = math.min(100, tile.water_level + sev * 15)
-            tile.flood_damage = true
-            tile.soil_fertility = math.max(0, tile.soil_fertility - sev * 3)
+            local m = bd.flood_mult
+            tile.water_level    = math.min(100, tile.water_level + sev * 15 * m)
+            tile.flood_damage   = true
+            tile.soil_fertility = math.max(0, tile.soil_fertility - sev * 3 * m)
 
         elseif evt == "Drought" then
-            tile.drought_weeks = tile.drought_weeks + sev * 2
-            tile.water_level   = math.max(0, tile.water_level - sev * 10)
+            local m = bd.drought_mult
+            tile.drought_weeks = tile.drought_weeks + sev * 2 * m
+            tile.water_level   = math.max(0, tile.water_level - sev * 10 * m)
 
         elseif evt == "LateFrost" or evt == "EarlyFrost" then
-            -- Direct biomass hit
+            -- Direct biomass hit — no biome modifier (frost is universal)
             tile.biomass = math.max(0, tile.biomass - sev * 6)
 
         elseif evt == "Blizzard" then
-            tile.biomass  = math.max(0, tile.biomass - sev * 4)
-            tile.fauna_pop = math.max(0, tile.fauna_pop - sev * 5)
+            local m = bd.blizzard_mult
+            tile.biomass   = math.max(0, tile.biomass   - sev * 4 * m)
+            tile.fauna_pop = math.max(0, tile.fauna_pop - sev * 5 * m)
 
         elseif evt == "CropBlight" then
             -- Blight hits soil fertility hard; handled in ResourceManager for grain

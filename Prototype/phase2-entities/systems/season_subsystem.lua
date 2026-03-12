@@ -115,8 +115,9 @@ function SeasonSubsystem.tick_day()
     -- Monthly tick every 14 days (half-season cadence; a "month" = one season-half)
     if s.day_of_year % 14 == 0 then
         EventBus.fire("MONTHLY_TICK", {
-            month = s.month,
-            year  = s.year,
+            month  = s.month,
+            year   = s.year,
+            season = s.season,
         })
         s.month = s.month + 1
     end

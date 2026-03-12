@@ -48,6 +48,10 @@ local GRAIN_FLAGS = {}  -- settlement_id → { planted, harvest_ready }
 -- stocks[settlement_id][resource] = number
 ResourceManager.stocks = {}
 
+-- Tracks which resources have already fired a RESOURCE_DEPLETED event this depletion cycle
+-- Cleared when the resource recovers above 5 units
+ResourceManager._depleted_flags = {}
+
 -- Population per settlement, used for consumption scaling.
 -- A settlement of 50 people consumes half what a settlement of 100 does.
 -- Updated from main.lua at registration; Phase 2 updates dynamically each month.
@@ -118,8 +122,14 @@ function ResourceManager._on_weekly_tick(data)
         -- Salt: slow accumulation through trade routes (simplified)
         stocks.Salt = math.min(100, stocks.Salt + BASE_WEEKLY_PRODUCTION.Salt)
 
-        -- Water: replenishes naturally; drought reduces it
-        stocks.Water = math.min(100, stocks.Water + BASE_WEEKLY_PRODUCTION.Water)
+        -- Water: replenishes naturally; drought suppresses refill
+        local tile = EcologySimulator.get_tile(id)
+        local drought_weeks = tile and tile.drought_weeks or 0
+        local water_refill = BASE_WEEKLY_PRODUCTION.Water
+        if drought_weeks > 0 then
+            water_refill = water_refill * math.max(0.1, 1 - drought_weeks * 0.2)
+        end
+        stocks.Water = math.min(100, stocks.Water + water_refill)
 
         -- Livestock: breeding in spring/summer (lambing, calving), slow in autumn, none in winter.
         -- Net production tuned so herd is self-sustaining at steady consumption.
@@ -140,6 +150,11 @@ function ResourceManager._on_weekly_tick(data)
 
         -- Grain: steady daily draw
         stocks.Grain = math.max(0, stocks.Grain - BASE_WEEKLY_CONSUMPTION.Grain * pop_scale)
+
+        -- Timber: used year-round for building, fencing, tools (reduced in winter)
+        local timber_use = BASE_WEEKLY_CONSUMPTION.Timber
+        if season == "Winter" then timber_use = timber_use * 0.5 end  -- less construction in winter
+        stocks.Timber = math.max(0, stocks.Timber - timber_use * pop_scale)
 
         -- Fuel: season-modulated
         local fuel_demand = BASE_WEEKLY_CONSUMPTION.Fuel * (FUEL_DEMAND_MULTIPLIER[season] or 1.0)
@@ -163,7 +178,6 @@ function ResourceManager._on_weekly_tick(data)
             if CRITICAL[resource] and qty <= 0 then
                 -- Track first-depletion to avoid re-firing every week
                 local key = id .. "_" .. resource .. "_depleted"
-                if not ResourceManager._depleted_flags then ResourceManager._depleted_flags = {} end
                 if not ResourceManager._depleted_flags[key] then
                     ResourceManager._depleted_flags[key] = true
                     EventBus.fire("RESOURCE_DEPLETED", {
@@ -174,9 +188,7 @@ function ResourceManager._on_weekly_tick(data)
                 end
             elseif qty > 5 then
                 -- Clear flag once recovered
-                if ResourceManager._depleted_flags then
-                    ResourceManager._depleted_flags[id .. "_" .. resource .. "_depleted"] = nil
-                end
+                ResourceManager._depleted_flags[id .. "_" .. resource .. "_depleted"] = nil
             end
         end
 
@@ -215,7 +227,7 @@ function ResourceManager._on_season_changed(data)
             -- So a normal year produces a ~12% buffer — modest surplus as designed.
             local tile      = EcologySimulator.get_tile(id)
             local fertility = tile and tile.soil_fertility or 70
-            local pop       = flags._population or 100  -- injected at registration
+            local pop       = ResourceManager.pop[id] or 100  -- live population, not registration snapshot
             local harvest_yield = math.floor((pop / 100) * 90 * (fertility / 100))
             stocks.Grain = math.min(250, stocks.Grain + harvest_yield)
             flags.planted       = false

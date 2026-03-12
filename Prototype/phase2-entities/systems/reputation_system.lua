@@ -28,7 +28,6 @@ function ReputationSystem.record_event(data)
         ctx         = data.ctx or {},
         infamy_delta= data.infamy_delta or 0,
         honour_delta= data.honour_delta or 0,
-        hop_count   = 0,
         known_by    = {},   -- entity ids that have heard this
     }
 
@@ -42,7 +41,7 @@ function ReputationSystem.record_event(data)
 
     table.insert(ReputationSystem.events, event)
     ReputationSystem._queue_narrative(event, 0, nil)
-    ReputationSystem._propagate(event)
+    ReputationSystem._propagate(event, 0)
 
     EventBus.fire("REPUTATION_EVENT", {
         event_type  = event.type,
@@ -58,7 +57,7 @@ end
 
 -- ── Propagation chain ─────────────────────────────────────────────────────────
 
-function ReputationSystem._propagate(event)
+function ReputationSystem._propagate(event, depth)
     local sid      = event.location
     local entities = EM.by_settlement[sid] or {}
     local spreader = event.witness or event.actor
@@ -69,7 +68,7 @@ function ReputationSystem._propagate(event)
         local is_actor   = entity.id == (event.actor   and event.actor.id   or -1)
         local is_witness = entity.id == (event.witness and event.witness.id or -1)
         if not is_actor and not is_witness then
-            local base_chance = 0.28
+            local base_chance = (CONFIG and CONFIG.base_pass_chance) or 0.28
             -- Amplified if spreader is prominent
             if spreader.prominence > 50 then base_chance = base_chance * 1.6
             elseif spreader.prominence > 25 then base_chance = base_chance * 1.2 end
@@ -80,19 +79,19 @@ function ReputationSystem._propagate(event)
                 table.insert(event.known_by, entity.id)
                 local context_fidelity = EM.get_context_preserve(entity)
 
-                -- Loudmouth entity tries to spread to a neighbouring settlement
-                if EM.has_trait(entity, "loudmouth") and event.hop_count < 2 then
-                    ReputationSystem._spread_to_neighbours(event, sid, entity, context_fidelity * 0.5)
-                -- Gossip entity spreads within same settlement one more hop
-                elseif EM.has_trait(entity, "gossip") and event.hop_count < 3 then
-                    ReputationSystem._queue_narrative(event, event.hop_count + 1, entity)
+                -- Loudmouth entity tries to spread to a neighbouring settlement (max depth 2)
+                if EM.has_trait(entity, "loudmouth") and depth < 2 then
+                    ReputationSystem._spread_to_neighbours(event, sid, entity, context_fidelity * 0.5, depth)
+                -- Gossip entity spreads within same settlement one more hop (max depth 3)
+                elseif EM.has_trait(entity, "gossip") and depth < 3 then
+                    ReputationSystem._queue_narrative(event, depth + 1, entity)
                 end
             end
         end
     end
 end
 
-function ReputationSystem._spread_to_neighbours(event, origin_sid, carrier, fidelity)
+function ReputationSystem._spread_to_neighbours(event, origin_sid, carrier, fidelity, depth)
     local neighbours = NEIGHBOURS[origin_sid] or {}
     for _, nsid in ipairs(neighbours) do
         if math.random() < 0.35 then
@@ -109,7 +108,7 @@ function ReputationSystem._spread_to_neighbours(event, origin_sid, carrier, fide
                     })
                 end
             end
-            ReputationSystem._queue_narrative(event, event.hop_count + 2, carrier)
+            ReputationSystem._queue_narrative(event, depth + 2, carrier)
         end
     end
 end

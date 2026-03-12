@@ -76,6 +76,7 @@ function EntityManager.register(data)
         age              = data.age or math.random(20, 50),
         infamy           = 0,
         honour           = 0,
+        situation_cooldown = 0,    -- weeks until this entity may respond to a situation again
         -- Visual state (used by renderer, updated by situation engine)
         last_event_time  = -999,   -- seconds since last event (for flash)
         last_event_tone  = "none", -- "honour"|"infamy"|"none"
@@ -114,13 +115,33 @@ function EntityManager.get_context_preserve(entity)
     return math.min(1.0, math.max(0.1, preserve))
 end
 
+-- Weeks of cooldown before a character can re-earn the same narrative trait.
+-- Prevents a single bad winter locking in "generous_soul" on turn 1 and never again.
+local NARRATIVE_TRAIT_COOLDOWN = 8  -- ~2 seasons
+
 function EntityManager.add_narrative_trait(entity, trait_name, ctx, EventBus)
-    -- No duplicates
-    for _, nt in ipairs(entity.narrative_traits) do
-        if nt.name == trait_name then return false end
-    end
     local def = EntityManager.NARRATIVE_TRAIT_DEFS[trait_name]
     if not def then return false end
+
+    -- Cooldown check: find most recent earning of this trait and test elapsed weeks
+    if ctx and ctx.year then
+        local now_abs = (ctx.year - 1) * 8 + (ctx.week or 0)
+        for i = #entity.narrative_traits, 1, -1 do
+            local nt = entity.narrative_traits[i]
+            if nt.name == trait_name then
+                local earned_abs = (nt.year - 1) * 8 + nt.week
+                if now_abs - earned_abs < NARRATIVE_TRAIT_COOLDOWN then
+                    return false  -- still cooling down
+                end
+                break  -- only the most recent matters
+            end
+        end
+    else
+        -- No time context: fall back to original once-ever guard
+        for _, nt in ipairs(entity.narrative_traits) do
+            if nt.name == trait_name then return false end
+        end
+    end
 
     local old_prom = entity.prominence
     table.insert(entity.narrative_traits, {
@@ -150,10 +171,14 @@ end
 
 -- Weekly decay: prominence drifts back toward role baseline without events
 function EntityManager.weekly_decay()
+    local decay = (CONFIG and CONFIG.prominence_decay) or 0.5
     for _, entity in ipairs(EntityManager.entities) do
         local baseline = EntityManager.ROLE_BASELINE[entity.role] or 5
         if entity.prominence > baseline then
-            entity.prominence = math.max(baseline, entity.prominence - 1)
+            entity.prominence = math.floor(math.max(baseline, entity.prominence - decay))
+        end
+        if entity.situation_cooldown > 0 then
+            entity.situation_cooldown = entity.situation_cooldown - 1
         end
         entity.last_event_time = entity.last_event_time + 1
     end

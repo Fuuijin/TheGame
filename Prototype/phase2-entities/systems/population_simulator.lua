@@ -106,13 +106,24 @@ function PopulationSimulator._on_weekly_tick(data)
             ps.famine_active = false
         end
 
-        -- Disease risk from ecology
+        -- Disease: once triggered it persists; clears on a weekly recovery roll
         local disease_chance = EcologySimulator.get_disease_risk(id)
-        if math.random() < disease_chance then
-            ps.disease_active = true
-            ps.morale = math.max(0, ps.morale - 4)
+        if not ps.disease_active then
+            -- Fresh outbreak roll
+            if math.random() < disease_chance then
+                ps.disease_active  = true
+                ps.disease_weeks   = 1
+                ps.morale = math.max(0, ps.morale - 4)
+            end
         else
-            ps.disease_active = false
+            -- Already sick: roll to recover (30% chance per week after week 2)
+            ps.disease_weeks = (ps.disease_weeks or 1) + 1
+            if ps.disease_weeks > 2 and math.random() < 0.30 then
+                ps.disease_active = false
+                ps.disease_weeks  = 0
+            else
+                ps.morale = math.max(0, ps.morale - 2)  -- ongoing morale drain
+            end
         end
 
         -- Active revolt: morale continues to fall
@@ -154,9 +165,12 @@ function PopulationSimulator._on_weekly_tick(data)
             end
         else
             -- Revolt resolves if morale recovers above 30 (food restored, faction intervenes)
-            if ps.morale > 30 and ps.starvation_weeks == 0 then
+            -- OR if it has burned itself out after 8 weeks (exhaustion, suppression)
+            if (ps.morale > 30 and ps.starvation_weeks == 0) or ps.revolt_weeks >= 8 then
                 ps.in_revolt    = false
                 ps.revolt_weeks = 0
+                -- Morale floor after suppression: things are grim but the revolt is over
+                ps.morale = math.max(ps.morale, 15)
             end
         end
 
@@ -195,6 +209,9 @@ function PopulationSimulator._on_monthly_tick(data)
             ps.population = math.max(1, ps.population - flee_count)
             -- In Phase 2: fleeing population moves to neighbouring settlements
         end
+
+        -- Sync back to ResourceManager so consumption scales with actual population
+        ResourceManager.pop[id] = ps.population
     end
 end
 

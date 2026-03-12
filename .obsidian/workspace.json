@@ -223,7 +223,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 742.5
+    "width": 582.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -241,22 +241,22 @@
       "obsidian-kanban:Create new board": false
     }
   },
-  "active": "0d4ba961bdb65634",
+  "active": "ab3ca35965798f2d",
   "lastOpenFiles": [
-    "Prototype/phase2-entities/systems/reputation_system.lua.tmp.10094.1773261296481",
+    "Prototype/phase2-entities/systems/resource_manager.lua.tmp.6405.1773301939168",
+    "Prototype/phase2-entities/systems/reputation_system.lua.tmp.6270.1773301830899",
+    "Prototype/phase2-entities/systems/resource_manager.lua.tmp.6202.1773301752985",
+    "Prototype/phase2-entities/systems/resource_manager.lua.tmp.6202.1773301748294",
+    "Prototype/phase2-entities/systems/resource_manager.lua.tmp.5737.1773301056172",
+    "Prototype/phase2-entities/systems/ecology_simulator.lua.tmp.12900.1773298403048",
+    "Prototype/phase2-entities/systems/ecology_simulator.lua.tmp.12900.1773298390461",
+    "Prototype/phase2-entities/systems/situation_engine.lua.tmp.12245.1773268949914",
+    "Prototype/phase2-entities/systems/situation_engine.lua.tmp.12245.1773268934264",
+    "Prototype/phase2-entities/systems/situation_engine.lua.tmp.12245.1773268905886",
+    "Prototype/phase2-entities/systems/entity_manager.lua.tmp.12245.1773268896062",
     "Systems/Social/Reputation & Propagation.md",
     "Systems/Social/Social Overview.md",
     "Home.md",
-    "Prototype/phase2-entities/systems/sedN0Kd8g",
-    "Prototype/phase2-entities/systems/sedQt5qt6",
-    "Prototype/phase2-entities/systems/sedOpIlnA",
-    "Prototype/phase2-entities/systems/sedZ8SVHQ",
-    "Prototype/phase2-entities/systems/sedwkFVUY",
-    "Prototype/phase2-entities/systems/sedbEp4Qu",
-    "Prototype/phase2-entities/systems/sedCfk30h",
-    "Prototype/phase2-entities/systems/sedonyY37",
-    "Prototype/phase2-entities/systems/sedRsPpcN",
-    "Prototype/phase2-entities/systems/sedMmPbUi",
     "Systems/Social/Influence.md",
     "Systems/Narrative Layer.md",
     "Systems/Ecology/Ecology Overview.md",
