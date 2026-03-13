@@ -1,6 +1,9 @@
 ---
 scope: mvp
 status: draft
+tags:
+  - outdated
+  - experiment
 ---
 
 # Phase 1 Prototype — Headless Simulation
